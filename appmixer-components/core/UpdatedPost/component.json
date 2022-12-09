@@ -1,0 +1,60 @@
+{
+    "name": "appmixer.demofirebase.core.UpdatedPost",
+    "author": "Appmixer <info@appmixer.com>",
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgyMyIgaGVpZ2h0PSIyNTAwIiB2aWV3Qm94PSIwIDAgMjU2IDM1MSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPjxkZWZzPjxwYXRoIGQ9Ik0xLjI1MyAyODAuNzMybDEuNjA1LTMuMTMxIDk5LjM1My0xODguNTE4LTQ0LjE1LTgzLjQ3NUM1NC4zOTItMS4yODMgNDUuMDc0LjQ3NCA0My44NyA4LjE4OEwxLjI1MyAyODAuNzMyeiIgaWQ9ImEiLz48ZmlsdGVyIHg9Ii01MCUiIHk9Ii01MCUiIHdpZHRoPSIyMDAlIiBoZWlnaHQ9IjIwMCUiIGZpbHRlclVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgaWQ9ImIiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjE3LjUiIGluPSJTb3VyY2VBbHBoYSIgcmVzdWx0PSJzaGFkb3dCbHVySW5uZXIxIi8+PGZlT2Zmc2V0IGluPSJzaGFkb3dCbHVySW5uZXIxIiByZXN1bHQ9InNoYWRvd09mZnNldElubmVyMSIvPjxmZUNvbXBvc2l0ZSBpbj0ic2hhZG93T2Zmc2V0SW5uZXIxIiBpbjI9IlNvdXJjZUFscGhhIiBvcGVyYXRvcj0iYXJpdGhtZXRpYyIgazI9Ii0xIiBrMz0iMSIgcmVzdWx0PSJzaGFkb3dJbm5lcklubmVyMSIvPjxmZUNvbG9yTWF0cml4IHZhbHVlcz0iMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMC4wNiAwIiBpbj0ic2hhZG93SW5uZXJJbm5lcjEiLz48L2ZpbHRlcj48cGF0aCBkPSJNMTM0LjQxNyAxNDguOTc0bDMyLjAzOS0zMi44MTItMzIuMDM5LTYxLjAwN2MtMy4wNDItNS43OTEtMTAuNDMzLTYuMzk4LTEzLjQ0My0uNTlsLTE3LjcwNSAzNC4xMDktLjUzIDEuNzQ0IDMxLjY3OCA1OC41NTZ6IiBpZD0iYyIvPjxmaWx0ZXIgeD0iLTUwJSIgeT0iLTUwJSIgd2lkdGg9IjIwMCUiIGhlaWdodD0iMjAwJSIgZmlsdGVyVW5pdHM9Im9iamVjdEJvdW5kaW5nQm94IiBpZD0iZCI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMy41IiBpbj0iU291cmNlQWxwaGEiIHJlc3VsdD0ic2hhZG93Qmx1cklubmVyMSIvPjxmZU9mZnNldCBkeD0iMSIgZHk9Ii05IiBpbj0ic2hhZG93Qmx1cklubmVyMSIgcmVzdWx0PSJzaGFkb3dPZmZzZXRJbm5lcjEiLz48ZmVDb21wb3NpdGUgaW49InNoYWRvd09mZnNldElubmVyMSIgaW4yPSJTb3VyY2VBbHBoYSIgb3BlcmF0b3I9ImFyaXRobWV0aWMiIGsyPSItMSIgazM9IjEiIHJlc3VsdD0ic2hhZG93SW5uZXJJbm5lcjEiLz48ZmVDb2xvck1hdHJpeCB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAuMDkgMCIgaW49InNoYWRvd0lubmVySW5uZXIxIi8+PC9maWx0ZXI+PC9kZWZzPjxwYXRoIGQ9Ik0wIDI4Mi45OThsMi4xMjMtMi45NzJMMTAyLjUyNyA4OS41MTJsLjIxMi0yLjAxN0w1OC40OCA0LjM1OEM1NC43Ny0yLjYwNiA0NC4zMy0uODQ1IDQzLjExNCA2Ljk1MUwwIDI4Mi45OTh6IiBmaWxsPSIjRkZDMjRBIi8+PHVzZSBmaWxsPSIjRkZBNzEyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHhsaW5rOmhyZWY9IiNhIi8+PHVzZSBmaWx0ZXI9InVybCgjYikiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggZD0iTTEzNS4wMDUgMTUwLjM4bDMyLjk1NS0zMy43NS0zMi45NjUtNjIuOTNjLTMuMTI5LTUuOTU3LTExLjg2Ni01Ljk3NS0xNC45NjIgMEwxMDIuNDIgODcuMjg3djIuODZsMzIuNTg0IDYwLjIzM3oiIGZpbGw9IiNGNEJENjIiLz48dXNlIGZpbGw9IiNGRkE1MEUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgeGxpbms6aHJlZj0iI2MiLz48dXNlIGZpbHRlcj0idXJsKCNkKSIgeGxpbms6aHJlZj0iI2MiLz48cGF0aCBmaWxsPSIjRjY4MjBDIiBkPSJNMCAyODIuOTk4bC45NjItLjk2OCAzLjQ5Ni0xLjQyIDEyOC40NzctMTI4IDEuNjI4LTQuNDMxLTMyLjA1LTYxLjA3NHoiLz48cGF0aCBkPSJNMTM5LjEyMSAzNDcuNTUxbDExNi4yNzUtNjQuODQ3LTMzLjIwNC0yMDQuNDk1Yy0xLjAzOS02LjM5OC04Ljg4OC04LjkyNy0xMy40NjgtNC4zNEwwIDI4Mi45OThsMTE1LjYwOCA2NC41NDhhMjQuMTI2IDI0LjEyNiAwIDAgMCAyMy41MTMuMDA1IiBmaWxsPSIjRkRFMDY4Ii8+PHBhdGggZD0iTTI1NC4zNTQgMjgyLjE2TDIyMS40MDIgNzkuMjE4Yy0xLjAzLTYuMzUtNy41NTgtOC45NzctMTIuMTAzLTQuNDI0TDEuMjkgMjgyLjZsMTE0LjMzOSA2My45MDhhMjMuOTQzIDIzLjk0MyAwIDAgMCAyMy4zMzQuMDA2bDExNS4zOTItNjQuMzU1eiIgZmlsbD0iI0ZDQ0EzRiIvPjxwYXRoIGQ9Ik0xMzkuMTIgMzQ1LjY0YTI0LjEyNiAyNC4xMjYgMCAwIDEtMjMuNTEyLS4wMDVMLjkzMSAyODIuMDE1bC0uOTMuOTgzIDExNS42MDcgNjQuNTQ4YTI0LjEyNiAyNC4xMjYgMCAwIDAgMjMuNTEzLjAwNWwxMTYuMjc1LTY0Ljg0Ny0uMjg1LTEuNzUyLTExNS45OSA2NC42ODl6IiBmaWxsPSIjRUVBQjM3Ii8+PC9zdmc+",
+    "private": false,
+    "quota": {},
+    "webhook": true,
+    "auth": {
+        "service": "appmixer:demofirebase"
+    },
+    "properties": {
+        "schema": {
+            "properties": {
+                "myPostsOnly": { "type": "boolean" }
+            }
+        },
+        "inspector": {
+            "inputs": {
+                "myPostsOnly": {
+                    "type": "toggle",
+                    "label": "Trigger on my posts only",
+                    "index": 1,
+                    "defaultValue": false,
+                    "tooltip": "Set if you want to trigger only when one of your own posts was updated. Unset if you want to trigger on updated posts of any user."
+                }
+            }
+        }
+    },
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Post ID",
+                    "value": "id"
+                },
+                {
+                    "label": "Post Title",
+                    "value": "title"
+                },
+                {
+                    "label": "Post Body",
+                    "value": "body"
+                },
+                {
+                    "label": "Author Name",
+                    "value": "author"
+                },
+                {
+                    "label": "Author Picture URL",
+                    "value": "authorPic"
+                },
+                {
+                    "label": "Star Count",
+                    "value": "starCount"
+                }
+            ]
+        }
+    ]
+}
