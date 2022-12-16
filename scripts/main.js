@@ -51,8 +51,8 @@ var APPMIXER_USER_DOMAIN = 'appmixer-demo-firebase-vanilla.com';
 var APPMIXER_BASE_URL = 'https://api.qa.appmixer.com';
 var appmixer = new Appmixer({ baseUrl: APPMIXER_BASE_URL });
 
-// See https://docs.appmixer.com/appmixer/customizing-ui/custom-theme.
-try {
+// See https://docs.appmixer.com/appmixer/customizing-ui/custom-theme
+// and https://github.com/clientIO/appmixer-fe/blob/dev/appmixer/sdk/src/assets/data/themes/light.js.
 appmixer.set('theme', {
     variables: {
         font: {
@@ -61,13 +61,12 @@ appmixer.set('theme', {
             weightRegular: 300,
             weightMedium: 400,
             weightSemibold: 500,
-            size: 16
+            size: 14
         },
         colors: {
             base: '#FFFFFF',
             neutral: '#000000',
             focus: '#039be5',
-            //focus: '#ffca28',
             error: '#DE3123',
             warning: '#B56C09',
             success: '#00b74a',
@@ -98,16 +97,91 @@ appmixer.set('theme', {
                 background: '#ffca28',
                 color: 'black'
             }
+        },
+        shapes: {
+            action: 'action',
+            trigger: 'trigger',
+            selection: 'selection'
+        },
+        '#Wizard': {
+            '#modal': {
+                '#backdrop': {
+                    background: 'rgba(0 0 0 / 70%)'
+                }
+            }
+        },
+        '#Integrations': {
+            background: '#f5f5f5',
+            '#integration': {
+                background: '#039be5',
+                color: 'white',
+                borderRadius: '2px',
+                '@hovered': {
+                    background: '#b3d4fc'
+                },
+                '#title': {
+                    color: 'white',
+                    fontSize: '{{variables.font.size15}}'
+                },
+                '#description': {
+                    color: 'white'
+                },
+                '#buttonRemove': {
+                    color: '#FCBE08'
+                }
+            }
+        },
+        '#FlowManager': {
+            background: '#f5f5f5',
+            '#buttonFlowStage': {
+                '#on': {
+                    border: 'white',
+                    background: '#FCBE08'
+                }
+            },
+            '#header': {
+                '#buttonCreateFlow': {
+                    background: '#ffca28',
+                    color: 'black',
+                    '@hovered': {
+                        background: '#ffca28',
+                        color: 'black'
+                    },
+                    '@disabled': {
+                        background: '#ffca28',
+                        color: 'black'
+                    }
+                }
+            },
+            '#grid': {
+                '#flow': {
+                    background: '#039be5',
+                    borderRadius: '2px',
+                    '@hovered': {
+                        background: '#b3d4fc'
+                    },
+                    '@disabled': {
+                        background: '{{variables.colors.neutral04}}'
+                    },
+                    '#name': {
+                        color: 'white'
+                    },
+                    '#thumbnail': {
+                        background: 'transparent'
+                    }
+                }
+            }
         }
     }
 });
-} catch (err) {}    
 // See https://my.appmixer.com/appmixer/package/strings-en.json.
 appmixer.set('strings', {
-    flowManager: {
-        header: {
-            title: 'Your Flows',
-            buttonCreateFlow: 'Create New Flow'
+    ui: {
+        flowManager: {
+            header: {
+                title: 'Your Flows',
+                buttonCreateFlow: 'Create New Flow'
+            }
         }
     }
 });
@@ -632,40 +706,7 @@ function closeAppmixerWidgets() {
     });
 }
 
-async function showIntegrations() {
-    // See https://github.com/clientIO/appmixer-fe/blob/dev/appmixer/sdk/src/assets/data/themes/light.js.
-    const integrationsTheme = {
-        ui: {
-            '#Integrations': {
-                background: '#f5f5f5',
-                '#integration': {
-                    background: '#039be5',
-                    color: 'white',
-                    '@hovered': {
-                        background: '#b3d4fc'
-                    },
-                    '#title': {
-                        color: 'white',
-                        fontSize: '{{variables.font.size15}}'
-                    },
-                    '#description': {
-                        color: 'white'
-                    },
-                    '#buttonRemove': {
-                        color: '#FCBE08'
-                    }
-                }
-            },
-            '#FlowManager': {
-                '#buttonFlowStage': {
-                    '#on': {
-                        border: 'white',
-                        background: '#FCBE08'
-                    }
-                }
-            }
-        }
-    };
+function showIntegrations() {
     appmixerWidgets.integrationTemplates = appmixerWidgets.integrationTemplates || appmixer.ui.Integrations({
         el: '#appmixer-integration-templates',
         options: {
@@ -674,8 +715,7 @@ async function showIntegrations() {
                 'sharedWith.0.domain': APPMIXER_USER_DOMAIN,     // Show only integration templates shared with users in this demo app.
                 'templateId': '!'       // Show Integration templates only. Template don't have `templateId`, only instances do to reference templates they were created from.
             }
-        },
-        theme: integrationsTheme
+        }
     });
     appmixerWidgets.integrationInstances = appmixerWidgets.integrationInstances || appmixer.ui.Integrations({
         el: '#appmixer-integration-instances',
@@ -685,22 +725,9 @@ async function showIntegrations() {
                 userId: appmixer.get('user').id,        // Show only my instances. Not all flows that have been possibly shared with me in the Studio.
                 'templateId': '>0'      // Show Integration instances only. Instances have `templateId` to reference the template they were created from.
             }
-        },
-        theme: integrationsTheme
-    });
-    appmixerWidgets.wizard = appmixerWidgets.wizard || appmixer.ui.Wizard({
-        theme: {
-            ui: {
-                '#Wizard': {
-                    '#modal': {
-                        '#backdrop': {
-                            background: 'rgba(0 0 0 / 70%)'
-                        }
-                    }
-                }
-            }
         }
     });
+    appmixerWidgets.wizard = appmixerWidgets.wizard || appmixer.ui.Wizard();
     // Make sure our list of integration instances is refreshed when integration is started or removed.
     // Note that we're using start-after and remove-after events. This is because by default, the wizard
     // does all the API calls to start or remove flows for us. It is also possible to redefine these events start/remove
@@ -710,7 +737,7 @@ async function showIntegrations() {
         appmixerWidgets.integrationInstances.reload();
         appmixerWidgets.wizard.close();
     });
-    appmixerWidgets.integrationTemplates.on('integration:create', async (templateId) => {
+    appmixerWidgets.integrationTemplates.on('integration:create', (templateId) => {
         appmixerWidgets.wizard.close();
         appmixerWidgets.wizard.set('flowId', templateId);
         appmixerWidgets.wizard.open();
@@ -735,44 +762,6 @@ async function showFlows() {
             customFilter: {
                 userId: appmixer.get('user').id, // Show only my flows.
                 'wizard.fields': '!'     // Filter out integration templates (i.e. flows that have a Wizard defined).
-            }
-        },
-        theme: {
-            ui: {
-                '#FlowManager': {
-                    background: '#f5f5f5',
-                    '#header': {
-                        '#buttonCreateFlow': {
-                            background: '#ffca28',
-                            color: 'black',
-                            '@hovered': {
-                                background: '#ffca28',
-                                color: 'black'
-                            },
-                            '@disabled': {
-                                background: '#ffca28',
-                                color: 'black'
-                            }
-                        }
-                    },
-                    '#grid': {
-                        '#flow': {
-                            background: '#039be5',
-                            '@hovered': {
-                                background: '#b3d4fc'
-                            },
-                            '@disabled': {
-                                background: '{{variables.colors.neutral04}}'
-                            },
-                            '#name': {
-                                color: 'white'
-                            },
-                            '#thumbnail': {
-                                background: 'transparent'
-                            }
-                        }
-                    }
-                }
             }
         }
     });
