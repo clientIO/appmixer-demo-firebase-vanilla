@@ -50,6 +50,41 @@ Embed the full featured workflow designer UI allowing the end user to build cust
     Then create a key `baseUrl` and set it to the Firebase Cloud Functions endpoint (usually `https://us-central1-[FIREBASE_PROJECT].cloudfunctions.net`).
     This base URL is used throughout the Appmixer components (`appmixer-components/`) to locate the API endpoints of this demo app in your own deployment.
 
+# Notes
+* Appmixer components are published in a module called "Firebase demo". You can find it under "Applications" in the Connectors section of the designer when designing integration templates:
+
+![Firebase Demo Connector](assets/firebase-demo-connector.png?raw=true "Firebase Demo Connector")
+
+* The Appmixer virtual users in this app are created with the `appmixer-demo-firebase-vanilla.com` domain. The full format of the Appmixer virtual user usernames is `[FIREBASE_UUID]@appmixer-demo-firebase-vanilla.com`. You can see it in your Backoffice interface under Users:
+
+![Backoffice users](assets/backoffice-users.png?raw=true "Backoffice user")
+
+* You can change the Appmixer virtual user's domain by changing the `APPMIXER_USER_DOMAIN` variable in `scripts/main.js` file.
+* An example of an integration template that sends a Slack message for new posts created (that you can create in the Appmixer Studio) can look like this:
+
+![Slack Integration Template](assets/integration-template-slack.png?raw=true "Slack Integration Template")
+
+Don't forget to define the Wizard and publish your integration template in the Wizard builder:
+
+![Open Wizard Builder](assets/wizard-builder-open.png?raw=true "Open Wizard Builder")
+
+Define all the sections for the final Wizard, starting with the Slack account that the user needs to connect:
+
+![Wizard Builder Slack Account](assets/wizard-builder-slack-account.png?raw=true "Wizard Builder Slack Account")
+
+Continue with adding a field that lets the user select their Slack channel:
+
+![Wizard Builder Slack Channel](assets/wizard-builder-slack-channel.png?raw=true "Wizard Builder Slack Channel")
+
+And finally add a filed to let the user customize the Slack message (note that you can define the default value in the Designer):
+
+![Wizard Builder Slack Message](assets/wizard-builder-slack-message.png?raw=true "Wizard Builder Slack Message")
+
+Once you Publish this integration template, your end users should see a new tile in the "All Integrations" section of their embedded integration marketplace. Once they click to configure their integration, they should see the Wizard that you just defined for them, with all the fields as configured in the Wizard builder:
+
+![Wizard Slack](assets/wizard-slack.png?raw=true "Wizard Slack")
+
+
 
 
 # License
