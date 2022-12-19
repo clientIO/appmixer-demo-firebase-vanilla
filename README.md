@@ -9,7 +9,7 @@ on the original Firebase Database demo from [https://github.com/firebase/quickst
 with only a few modifications that embed Appmixer Integrations marketplace and Flow Manager (together with Designer). Also, a REST API was implemented
 using Firebase Cloud Functions to be able to build Appmixer connector for the demo app to be used in Appmixer automations and integrations.
 
-The app shows the 3 most common use cases for Appmixer embedding:
+The app shows the 2 most common use cases for Appmixer embedding:
 
 ## Integration templates
 
@@ -48,7 +48,7 @@ Embed the full featured workflow designer UI allowing the end user to build cust
  9. Configure the `baseUrl` (of this demo REST API endpoint) in your Appmixer Backoffice (`https://backoffice.[YOUR_TENANT].appmixer.cloud`).
     Go to **Services > Add** and add a new service with ID `appmixer:demofirebase`.
     Then create a key `baseUrl` and set it to the Firebase Cloud Functions endpoint (usually `https://us-central1-[FIREBASE_PROJECT].cloudfunctions.net`).
-    This base URL is used throughout the Appmixer components (`appmixer-components/`).
+    This base URL is used throughout the Appmixer components (`appmixer-components/`) to locate the API endpoints of this demo app in your own deployment.
 
 
 
