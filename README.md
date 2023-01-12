@@ -60,7 +60,7 @@ Embed the full featured workflow designer UI allowing the end user to build cust
 ![Backoffice users](assets/backoffice-users.png?raw=true "Backoffice user")
 
 * You can change the Appmixer virtual user's domain by changing the `APPMIXER_USER_DOMAIN` variable in `scripts/main.js` file.
-* An example of an integration template that sends a Slack message for new posts created (that you can create in the Appmixer Studio) can look like this:
+* You can find an example of an integration template that sends a Slack message for new posts created (that you can create in the Appmixer Studio) below. Note that before you can start using Slack connector in your Appmixer tenant, you first need to configure OAuth 2 app with Slack. Follow the tutorial from the Appmixer docs: [https://docs.appmixer.com/appmixer/app-registration/slack](https://docs.appmixer.com/appmixer/app-registration/slack).
 
 ![Slack Integration Template](assets/integration-template-slack.png?raw=true "Slack Integration Template")
 
