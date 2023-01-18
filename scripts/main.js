@@ -769,46 +769,53 @@ function closeAppmixerWidgets() {
 }
 
 function showIntegrations() {
-    appmixerWidgets.integrationTemplates = appmixerWidgets.integrationTemplates || appmixer.ui.Integrations({
-        el: '#appmixer-integration-templates',
-        options: {
-            showHeader: false,
-            customFilter: {
-                'sharedWith.0.domain': APPMIXER_USER_DOMAIN,     // Show only integration templates shared with users in this demo app.
-                'templateId': '!'       // Show Integration templates only. Template don't have `templateId`, only instances do to reference templates they were created from.
+
+    if (!appmixerWidgets.wizard) {
+        appmixerWidgets.wizard = appmixer.ui.Wizard();
+        // Make sure our list of integration instances is refreshed when integration is started or removed.
+        // Note that we're using start-after and remove-after events. This is because by default, the wizard
+        // does all the API calls to start or remove flows for us. It is also possible to redefine these events start/remove
+        // and use the appmixer.api module to start/remove flows manually.
+        appmixerWidgets.wizard.on('flow:start-after', () => appmixerWidgets.integrationInstances.reload());
+        appmixerWidgets.wizard.on('flow:remove-after', () => {
+            appmixerWidgets.integrationInstances.reload();
+            appmixerWidgets.wizard.close();
+        });
+    }
+    if (!appmixerWidgets.integrationTemplates) {
+        appmixerWidgets.integrationTemplates = appmixer.ui.Integrations({
+            el: '#appmixer-integration-templates',
+            options: {
+                showHeader: false,
+                customFilter: {
+                    'sharedWith.0.domain': APPMIXER_USER_DOMAIN,     // Show only integration templates shared with users in this demo app.
+                    'templateId': '!'       // Show Integration templates only. Template don't have `templateId`, only instances do to reference templates they were created from.
+                }
             }
-        }
-    });
-    appmixerWidgets.integrationInstances = appmixerWidgets.integrationInstances || appmixer.ui.Integrations({
-        el: '#appmixer-integration-instances',
-        options: {
-            showHeader: false,
-            customFilter: {
-                userId: appmixer.get('user').id,        // Show only my instances. Not all flows that have been possibly shared with me in the Studio.
-                'templateId': '>0'      // Show Integration instances only. Instances have `templateId` to reference the template they were created from.
+        });
+        appmixerWidgets.integrationTemplates.on('integration:create', (templateId) => {
+            appmixerWidgets.wizard.close();
+            appmixerWidgets.wizard.set('flowId', templateId);
+            appmixerWidgets.wizard.open();
+        });
+    }
+    if (!appmixerWidgets.integrationInstances) {
+        appmixerWidgets.integrationInstances = appmixer.ui.Integrations({
+            el: '#appmixer-integration-instances',
+            options: {
+                showHeader: false,
+                customFilter: {
+                    userId: appmixer.get('user').id,        // Show only my instances. Not all flows that have been possibly shared with me in the Studio.
+                    'templateId': '>0'      // Show Integration instances only. Instances have `templateId` to reference the template they were created from.
+                }
             }
-        }
-    });
-    appmixerWidgets.wizard = appmixerWidgets.wizard || appmixer.ui.Wizard();
-    // Make sure our list of integration instances is refreshed when integration is started or removed.
-    // Note that we're using start-after and remove-after events. This is because by default, the wizard
-    // does all the API calls to start or remove flows for us. It is also possible to redefine these events start/remove
-    // and use the appmixer.api module to start/remove flows manually.
-    appmixerWidgets.wizard.on('flow:start-after', () => appmixerWidgets.integrationInstances.reload());
-    appmixerWidgets.wizard.on('flow:remove-after', () => {
-        appmixerWidgets.integrationInstances.reload();
-        appmixerWidgets.wizard.close();
-    });
-    appmixerWidgets.integrationTemplates.on('integration:create', (templateId) => {
-        appmixerWidgets.wizard.close();
-        appmixerWidgets.wizard.set('flowId', templateId);
-        appmixerWidgets.wizard.open();
-    });
-    appmixerWidgets.integrationInstances.on('integration:edit', (integrationId) => {
-        appmixerWidgets.wizard.close();
-        appmixerWidgets.wizard.set('flowId', integrationId);
-        appmixerWidgets.wizard.open();
-    });
+        });
+        appmixerWidgets.integrationInstances.on('integration:edit', (integrationId) => {
+            appmixerWidgets.wizard.close();
+            appmixerWidgets.wizard.set('flowId', integrationId);
+            appmixerWidgets.wizard.open();
+        });
+    }
     appmixerWidgets.integrationTemplates.open();
     appmixerWidgets.integrationInstances.open();
 }
@@ -816,17 +823,35 @@ function showIntegrations() {
 
 
 async function showFlows() {
-    appmixerWidgets.flowManager = appmixerWidgets.flowManager || appmixer.ui.FlowManager({
-        el: '#appmixer-flowmanager',
-        options: {
-            showHeader: false,
-            menu: [ { label: 'Delete', event: 'flow:remove' } ],
-            customFilter: {
-                userId: appmixer.get('user').id, // Show only my flows.
-                'wizard.fields': '!'     // Filter out integration templates (i.e. flows that have a Wizard defined).
+    if (!appmixerWidgets.flowManager) {
+        appmixerWidgets.flowManager = appmixer.ui.FlowManager({
+            el: '#appmixer-flowmanager',
+            options: {
+                showHeader: false,
+                menu: [ { label: 'Delete', event: 'flow:remove' } ],
+                customFilter: {
+                    userId: appmixer.get('user').id, // Show only my flows.
+                    'wizard.fields': '!'     // Filter out integration templates (i.e. flows that have a Wizard defined).
+                }
             }
-        }
-    });
+        });
+        // Note: flow:start, flow:stop, flow:remove is handled implicitely since we're not overriding the behaviour here.
+        appmixerWidgets.flowManager.on('flow:create', async () => {
+            try {
+                appmixerWidgets.flowManager.state('loader', true);
+                var flowId = await appmixer.api.createFlow('New flow');
+                appmixerWidgets.flowManager.state('loader', false);
+                appmixerWidgets.designer.set('flowId', flowId);
+                appmixerWidgets.flowManager.close();
+                appmixerWidgets.designer.open();
+            } catch (err) { onerror(err) }
+        });
+        appmixerWidgets.flowManager.on('flow:open', (flowId) => {
+            appmixerWidgets.designer.set('flowId', flowId);
+            appmixerWidgets.flowManager.close();
+            appmixerWidgets.designer.open();
+        });
+    }
     appmixerWidgets.designer = appmixerWidgets.designer || appmixer.ui.Designer({
         el: '#appmixer-designer',
         options: {
@@ -843,22 +868,6 @@ async function showFlows() {
                 ['logs']
             ]
         }
-    });
-    // Note: flow:start, flow:stop, flow:remove is handled implicitely since we're not overriding the behaviour here.
-    appmixerWidgets.flowManager.on('flow:create', async () => {
-        try {
-            appmixerWidgets.flowManager.state('loader', true);
-            var flowId = await appmixer.api.createFlow('New flow');
-            appmixerWidgets.flowManager.state('loader', false);
-            appmixerWidgets.designer.set('flowId', flowId);
-            appmixerWidgets.flowManager.close();
-            appmixerWidgets.designer.open();
-        } catch (err) { onerror(err) }
-    });
-    appmixerWidgets.flowManager.on('flow:open', (flowId) => {
-        appmixerWidgets.designer.set('flowId', flowId);
-        appmixerWidgets.flowManager.close();
-        appmixerWidgets.designer.open();
     });
     appmixerWidgets.flowManager.open();
 }
