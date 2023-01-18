@@ -129,7 +129,69 @@ appmixer.set('theme', {
                 '#buttonRemove': {
                     color: '#FCBE08'
                 }
-            }
+            },
+            '#buttonFlowStage': {
+                '#on': {
+                    background: 'white',
+                    borderColor: 'white',
+                    color: '#039BE5',
+                    '@hovered': {
+                        background: '#CDEBFA',
+                        borderColor: '#CDEBFA',
+                        color: '#039BE5'
+                    },
+                    '@disabled': {
+                        background: '#90D3F3',
+                        borderColor: '#90D3F3',
+                        color: '#039BE5'
+                    },
+                    '@invalid': {
+                        background: '#90D3F3',
+                        borderColor: '#90D3F3',
+                        color: '#039BE5'
+                    }
+                },
+                '#off': {
+                    background: 'white',
+                    borderColor: 'white',
+                    color: '#039BE5',
+                    '@hovered': {
+                        background: '#CDEBFA',
+                        borderColor: '#CDEBFA',
+                        color: '#039BE5'
+                    },
+                    '@disabled': {
+                        background: '#90D3F3',
+                        borderColor: '#90D3F3',
+                        color: '#039BE5'
+                    },
+                    '@invalid': {
+                        background: '#90D3F3',
+                        borderColor: '#90D3F3',
+                        color: '#039BE5'
+                    }
+                },
+                '#neutral': {
+                    background: 'white',
+                    borderColor: 'white',
+                    color: '#039BE5',
+                    '@hovered': {
+                        background: '#CDEBFA',
+                        borderColor: '#CDEBFA',
+                        color: '#039BE5'
+                    },
+                    '@disabled': {
+                        background: '#90D3F3',
+                        borderColor: '#90D3F3',
+                        color: '#039BE5'
+                    },
+                    '@invalid': {
+                        background: '#90D3F3',
+                        borderColor: '#90D3F3',
+                        color: '#039BE5'
+                    }
+                }
+            },
         },
         '#FlowManager': {
             background: '#f5f5f5',
