@@ -64,6 +64,18 @@ app.post('/posts', async (req, res) => {
     res.json({ id: newPostKey });
 });
 
+app.post('/posts/:id/comments', async (req, res) => {
+    const user = await getUserByApiKey(req.query.apiKey);
+    if (!user) return res.status(401).end();
+    const commentData = {
+        author: user.username,
+        uid: user.id,
+        text: req.body.text
+    };
+    firebaseApp.database().ref().child('post-comments/' + req.params.id).push(commentData);
+    res.json({});
+});
+
 app.post('/webhooks', async (req, res) => {
     const user = await getUserByApiKey(req.query.apiKey);
     if (!user) return res.status(401).end();
