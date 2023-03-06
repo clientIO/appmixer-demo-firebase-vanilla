@@ -213,6 +213,7 @@ main {
 }
 #page-new-post dialog {
     display: block;
+    width: 500px;
     margin: 32px auto;
     padding: 16px;
     border-radius: 4px;
