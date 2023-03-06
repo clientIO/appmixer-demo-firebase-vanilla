@@ -221,7 +221,6 @@ main {
 #page-new-post > dialog > form {
     display: flex;
     flex-flow: column nowrap;
-    width: calc(var(--base-section-width) / 2);
 }
 #page-new-post > dialog > form > h1 {
     margin-bottom: 24px;
@@ -263,16 +262,19 @@ main {
     background: var(--color-primary);
 }
 .posts-container {
-    width: 500px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 320px);
+    grid-gap: 24px;
+    width: var(--base-section-width);
     padding: 32px 0;
     margin: 0 auto;
 }
 .posts-container article {
     display: flex;
     flex-flow: column nowrap;
+    height: 100%;
     border-radius: 6px;
     background: white;
-    margin-bottom: 24px;
 }
 .posts-container article > header {
     display: flex;
@@ -320,6 +322,9 @@ main {
     display: flex;
     align-items: center;
     padding: 0 12px 12px;
+}
+.posts-container article > section:last-child {
+    margin-top: auto;
 }
 .posts-container article > section > img {
     display: inline-block;
@@ -448,6 +453,9 @@ div.am-integrations__grid:first-child {
 }
 
 /* Automations page */
+#page-automations {
+  background: white;
+}
 #page-automations > section {
   width: var(--base-section-width);
   padding: 24px 0;
@@ -455,10 +463,6 @@ div.am-integrations__grid:first-child {
 }
 div.am-flow-manager {
   position: static;
-}
-rect[joint-selector=label-rect],
-rect[joint-selector=connection-port-label-rect] {
-  fill: #29313F;
 }
 
 /* Designer page */

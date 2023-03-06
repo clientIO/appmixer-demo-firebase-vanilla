@@ -64,25 +64,6 @@ const pages = [
     'designer'
 ];
 
-const automationsDarkTheme = {
-    mode: 'dark',
-    variables: {
-        colors: {
-            focus: '#3B77E7',
-            base: '#273140',
-            separator: '#262F3F',
-            neutral: '#FFFFFF'
-        }
-    },
-    ui: {
-        shapes: {
-            action: 'action-dark',
-            trigger: 'trigger-dark',
-            selection: 'selection-dark'
-        }
-    }
-};
-
 /**
  * Alert the given error.
  */
@@ -492,7 +473,16 @@ function createWidgets() {
     // Create Automations Page widget.
     widgets.automations = appmixer.ui.FlowManager({
         el: '#appmixer-flow-manager',
-        theme: automationsDarkTheme,
+        theme: {
+            variables: {
+                colors: {
+                    focus: '#3B77E7',
+                    neutral: '#323947',
+                    surface: '#FFFFFF',
+                    above: '#FFFFFF'
+                }
+            }
+        },
         l10n: {
             ui: {
                 flowManager: {
@@ -511,7 +501,14 @@ function createWidgets() {
     // Create Designer Page widget.
     widgets.designer = appmixer.ui.Designer({
         el: '#appmixer-designer',
-        theme: automationsDarkTheme,
+        theme: {
+            variables: {
+                colors: {
+                    focus: '#3B77E7',
+                    neutral: '#323947'
+                }
+            }
+        },
         options: {
             showButtonHome: true,
             menu: [
