@@ -250,7 +250,6 @@ function createPostElement(postId, title, text, author, authorId, authorPic) {
 function startDatabaseQueries() {
 
     const myUserId = firebase.auth().currentUser.uid;
-    const topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
     const recentPostsRef = firebase.database().ref('posts').limitToLast(100);
     const userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
@@ -283,7 +282,6 @@ function startDatabaseQueries() {
     fetchPosts(userPostsRef, document.getElementById('page-posts'));
 
     // Keep track of all Firebase refs we are listening to.
-    listeningFirebaseRefs.push(topUserPostsRef);
     listeningFirebaseRefs.push(recentPostsRef);
     listeningFirebaseRefs.push(userPostsRef);
 }
