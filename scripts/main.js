@@ -130,7 +130,10 @@ function createPostElement(postId, title, text, author, authorId, authorPic) {
             <button class="btn-delete"></button>
         </header>
         <section>
-            <img src="${authorPic || 'silhouette.jpg'}">
+            <img
+                src="${authorPic || 'silhouette.jpg'}"
+                onerror="this.src='silhouette.jpg';"
+            >
             <h2>${author || 'Anonymous'}</h2>
         </section>
         <section>
