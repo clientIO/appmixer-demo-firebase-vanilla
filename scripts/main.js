@@ -476,12 +476,15 @@ function createWidgets() {
     widgets.automations = appmixer.ui.FlowManager({
         el: '#appmixer-flow-manager',
         theme: {
+            mode: 'dark',
             variables: {
                 colors: {
-                    focus: '#3B77E7',
-                    neutral: '#323947',
-                    surface: '#FFFFFF',
-                    above: '#FFFFFF'
+                    separator: '#6E8BD3',
+                    surface: '#3265CB',
+                    base: '#3265CB',
+                    neutral: '#FFFFFF',
+                    focus: '#FFFFFF',
+                    focusNG: '#3265CB'
                 }
             }
         },

@@ -455,7 +455,7 @@ div.am-integrations__grid:first-child {
 
 /* Automations page */
 #page-automations {
-  background: white;
+  background: var(--color-primary);
 }
 #page-automations > section {
   width: var(--base-section-width);
