@@ -1,4 +1,6 @@
 .firebase/
 .firebaserc
+firebase-debug.log
 node_modules/
 appmixer.demofirebase.zip
+

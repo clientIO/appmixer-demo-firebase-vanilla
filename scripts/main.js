@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Modifications copyright (C) 2022 client IO s.r.o.
+ * Modifications copyright (C) 2023 client IO s.r.o.
  */
+
+// Just for demo purposes to show how the app looks like without Appmixer embedded.
+if ((location + '').indexOf('without-appmixer') !== -1) {
+    document.querySelector('#main-header > nav > a[href="#integrations"]').style.display = 'none';
+    document.querySelector('#main-header > nav > a[href="#automations"]').style.display = 'none';
+}
 
 // Appmixer virtual users will be created under this domain.
 var APPMIXER_USER_DOMAIN = 'appmixer-demo-firebase-vanilla.com';
@@ -55,10 +61,9 @@ const widgets = {
 };
 
 const pages = [
-    'new-post',
     'recent',
     'posts',
-    'top-posts',
+    'new-post',
     'integrations',
     'automations',
     'designer'
@@ -271,7 +276,6 @@ function startDatabaseQueries() {
     };
 
     // Fetching and displaying all posts of each sections.
-    fetchPosts(topUserPostsRef, document.getElementById('page-top-posts'));
     fetchPosts(recentPostsRef, document.getElementById('page-recent'));
     fetchPosts(userPostsRef, document.getElementById('page-posts'));
 
@@ -404,8 +408,6 @@ function navigate() {
     if (route === 'recent') {
         //
     } else if (route === 'posts') {
-        //
-    } else if (route === 'top-posts') {
         //
     } else if (route === 'integrations') {
         setupIntegrationsPage();
@@ -690,7 +692,7 @@ window.addEventListener('load', async () => {
                     location.href = '#posts';
                 });
             }
-        });    
+        });
 
     // Listen for authentication state changes.
     firebase.auth().onAuthStateChanged(onAuthStateChanged);
