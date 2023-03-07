@@ -15,243 +15,67 @@
  *
  * Modifications copyright (C) 2022 client IO s.r.o.
  */
-'use strict';
-
-
-// Shortcuts to DOM Elements.
-var messageForm = document.getElementById('message-form');
-var messageInput = document.getElementById('new-post-message');
-var titleInput = document.getElementById('new-post-title');
-var signInButton = document.getElementById('sign-in-button');
-var signOutButton = document.getElementById('sign-out-button');
-var splashPage = document.getElementById('page-splash');
-var addPost = document.getElementById('add-post');
-var addButton = document.getElementById('add');
-var recentPostsSection = document.getElementById('recent-posts-list');
-var userPostsSection = document.getElementById('user-posts-list');
-var topUserPostsSection = document.getElementById('top-user-posts-list');
-var integrationsSection = document.getElementById('integrations-section');
-var automationsSection = document.getElementById('automations-section');
-var recentMenuButton = document.getElementById('menu-recent');
-var myPostsMenuButton = document.getElementById('menu-my-posts');
-var myIntegrationsMenuButton = document.getElementById('menu-my-integrations');
-var myAutomationsMenuButton = document.getElementById('menu-my-automations');
-var myTopPostsMenuButton = document.getElementById('menu-my-top-posts');
-var listeningFirebaseRefs = [];
-
-// Just for demo purposes to show how the app looks like without Appmixer embedded.
-if ((location.hash || '').indexOf('#without-appmixer') !== -1) {
-    myIntegrationsMenuButton.style.display = 'none';
-    myAutomationsMenuButton.style.display = 'none';
-}
 
 // Appmixer virtual users will be created under this domain.
 var APPMIXER_USER_DOMAIN = 'appmixer-demo-firebase-vanilla.com';
 // Replace with your own Appmixer API base URL coming from your Appmixer tenant: https://api.[YOUR_TENANT].appmixer.cloud.
 var APPMIXER_BASE_URL = 'https://api.qa.appmixer.com';
-var appmixer = new Appmixer({ baseUrl: APPMIXER_BASE_URL });
 
-// See https://docs.appmixer.com/appmixer/customizing-ui/custom-theme
-// and https://github.com/clientIO/appmixer-fe/blob/dev/appmixer/sdk/src/assets/data/themes/light.js.
-appmixer.set('theme', {
-    variables: {
-        font: {
-            family: 'Roboto,Helvetica,sans-serif',
-            familyMono: '\'SF Mono\', \'ui-monospace\', Menlo, monospace',
-            weightRegular: 300,
-            weightMedium: 400,
-            weightSemibold: 500,
-            size: 14
-        },
-        colors: {
-            base: '#FFFFFF',
-            neutral: '#000000',
-            focus: '#039be5',
-            error: '#DE3123',
-            warning: '#B56C09',
-            success: '#00b74a',
-            modifier: '#C558CF',
-            highlighter: '#FFA500'
-        },
-        shadows: {
-            backdrop: 'rgba(0 0 0 / 6%)',
-            popover: '0 3px 9px rgba(0 0 0 / 12%)',
-            icon: '0 1px 3px rgb(0 0 0 / 6%)'
-        },
-        corners: {
-            radiusSmall: '2px',
-            radiusMedium: '2px',
-            radiusLarge: '2px'
-        },
-        dividers: {
-            regular: '1px',
-            medium: '2px',
-            semibold: '3px',
-            bold: '6px',
-            extrabold: '9px'
-        }
-    },
-    ui: {
-        mixins: {
-            '#buttonPrimary': {
-                background: '#ffca28',
-                color: 'black'
-            }
-        },
-        shapes: {
-            action: 'action',
-            trigger: 'trigger',
-            selection: 'selection'
-        },
-        '#Wizard': {
-            '#modal': {
-                '#backdrop': {
-                    background: 'rgba(0 0 0 / 70%)'
-                }
-            }
-        },
-        '#Integrations': {
-            background: '#f5f5f5',
-            '#integration': {
-                background: '#039be5',
-                color: 'white',
-                borderRadius: '2px',
-                '@hovered': {
-                    background: '#b3d4fc'
-                },
-                '#title': {
-                    color: 'white',
-                    fontSize: '{{variables.font.size15}}'
-                },
-                '#description': {
-                    color: 'white'
-                },
-                '#buttonRemove': {
-                    color: '#FCBE08'
-                }
-            },
-            '#buttonFlowStage': {
-                '#on': {
-                    background: 'white',
-                    borderColor: 'white',
-                    color: '#039BE5',
-                    '@hovered': {
-                        background: '#CDEBFA',
-                        borderColor: '#CDEBFA',
-                        color: '#039BE5'
-                    },
-                    '@disabled': {
-                        background: '#90D3F3',
-                        borderColor: '#90D3F3',
-                        color: '#039BE5'
-                    },
-                    '@invalid': {
-                        background: '#90D3F3',
-                        borderColor: '#90D3F3',
-                        color: '#039BE5'
-                    }
-                },
-                '#off': {
-                    background: 'white',
-                    borderColor: 'white',
-                    color: '#039BE5',
-                    '@hovered': {
-                        background: '#CDEBFA',
-                        borderColor: '#CDEBFA',
-                        color: '#039BE5'
-                    },
-                    '@disabled': {
-                        background: '#90D3F3',
-                        borderColor: '#90D3F3',
-                        color: '#039BE5'
-                    },
-                    '@invalid': {
-                        background: '#90D3F3',
-                        borderColor: '#90D3F3',
-                        color: '#039BE5'
-                    }
-                },
-                '#neutral': {
-                    background: 'white',
-                    borderColor: 'white',
-                    color: '#039BE5',
-                    '@hovered': {
-                        background: '#CDEBFA',
-                        borderColor: '#CDEBFA',
-                        color: '#039BE5'
-                    },
-                    '@disabled': {
-                        background: '#90D3F3',
-                        borderColor: '#90D3F3',
-                        color: '#039BE5'
-                    },
-                    '@invalid': {
-                        background: '#90D3F3',
-                        borderColor: '#90D3F3',
-                        color: '#039BE5'
-                    }
-                }
-            },
-        },
-        '#FlowManager': {
-            background: '#f5f5f5',
-            '#buttonFlowStage': {
-                '#on': {
-                    border: 'white',
-                    background: '#FCBE08'
-                }
-            },
-            '#header': {
-                '#buttonCreateFlow': {
-                    background: '#ffca28',
-                    color: 'black',
-                    '@hovered': {
-                        background: '#ffca28',
-                        color: 'black'
-                    },
-                    '@disabled': {
-                        background: '#ffca28',
-                        color: 'black'
-                    }
-                }
-            },
-            '#grid': {
-                '#flow': {
-                    background: '#039be5',
-                    borderRadius: '2px',
-                    '@hovered': {
-                        background: '#b3d4fc'
-                    },
-                    '@disabled': {
-                        background: '{{variables.colors.neutral04}}'
-                    },
-                    '#name': {
-                        color: 'white'
-                    },
-                    '#thumbnail': {
-                        background: 'transparent'
-                    }
-                }
+/**
+ * The ID of the currently signed-in User. We keep track of this to detect Auth state change events that are just
+ * programmatic token refresh but not a User status change.
+ */
+let currentUID;
+
+// Register the initial authentication event.
+let appHasAuthState = false;
+
+// Manager Firebase refs.
+let listeningFirebaseRefs = [];
+
+// Create a new Appmixer instance.
+const appmixer = new Appmixer({
+    baseUrl: APPMIXER_BASE_URL,
+    theme: {
+        variables: {
+            font: {
+                family: 'Roboto, sans-serif',
+                familyMono: 'monospace',
+                size: 14
             }
         }
     }
 });
-// See https://my.appmixer.com/appmixer/package/strings-en.json.
-appmixer.set('strings', {
-    ui: {
-        flowManager: {
-            header: {
-                title: 'Your Flows',
-                buttonCreateFlow: 'Create New Flow'
-            }
-        }
-    }
-});
-    
+
+const widgets = {
+    integrations: null,
+    automations: null,
+    designer: null,
+    wizard: null
+};
+
+const pages = [
+    'new-post',
+    'recent',
+    'posts',
+    'top-posts',
+    'integrations',
+    'automations',
+    'designer'
+];
+
+/**
+ * Alert the given error.
+ */
+function onerror(err) {
+    alert(err);
+}
+
 /**
  * Saves a new post to the Firebase DB.
  */
 function writeNewPost(uid, username, picture, title, body) {
+
     // A post entry.
     var postData = {
         author: username,
@@ -274,257 +98,6 @@ function writeNewPost(uid, username, picture, title, body) {
 }
 
 /**
- * Star/unstar post.
- */
-function toggleStar(postRef, uid) {
-    postRef.transaction(function(post) {
-        if (post) {
-            if (post.stars && post.stars[uid]) {
-                post.starCount--;
-                post.stars[uid] = null;
-            } else {
-                post.starCount++;
-                if (!post.stars) {
-                    post.stars = {};
-                }
-                post.stars[uid] = true;
-            }
-        }
-        return post;
-    });
-}
-
-/**
- * Delete post.
- */
-function deletePost(postRef) {
-    postRef.remove();
-}
-
-/**
- * Creates a post element.
- */
-function createPostElement(postId, title, text, author, authorId, authorPic) {
-    var uid = firebase.auth().currentUser.uid;
-
-    var html =
-        '<div class="post post-' + postId + ' mdl-cell mdl-cell--12-col ' +
-        'mdl-cell--6-col-tablet mdl-cell--4-col-desktop mdl-grid mdl-grid--no-spacing">' +
-        '<div class="mdl-card mdl-shadow--2dp">' +
-        '<div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">' +
-        '<h4 class="mdl-card__title-text"></h4>' +
-        '</div>' +
-        '<div class="header">' +
-        '<div>' +
-        '<div class="avatar"></div>' +
-        '<div class="username mdl-color-text--black"></div>' +
-        '</div>' +
-        '</div>' +
-        '<span class="star">' +
-        '<div class="not-starred material-icons">star_border</div>' +
-        '<div class="starred material-icons">star</div>' +
-        '<div class="star-count">0</div>' +
-        '</span>' +
-        '<span class="btn-delete material-icons">delete</span>' +
-        '<div class="text"></div>' +
-        '<div class="comments-container"></div>' +
-        '<form class="add-comment" action="#">' +
-        '<div class="mdl-textfield mdl-js-textfield">' +
-        '<input class="mdl-textfield__input new-comment" type="text">' +
-        '<label class="mdl-textfield__label">Comment...</label>' +
-        '</div>' +
-        '</form>' +
-        '</div>' +
-        '</div>';
-
-    // Create the DOM element from the HTML.
-    var div = document.createElement('div');
-    div.innerHTML = html;
-    var postElement = div.firstChild;
-    if (componentHandler) {
-        componentHandler.upgradeElements(postElement.getElementsByClassName('mdl-textfield')[0]);
-    }
-
-    var addCommentForm = postElement.getElementsByClassName('add-comment')[0];
-    var commentInput = postElement.getElementsByClassName('new-comment')[0];
-    var star = postElement.getElementsByClassName('starred')[0];
-    var unStar = postElement.getElementsByClassName('not-starred')[0];
-    var deleteBtn = postElement.getElementsByClassName('btn-delete')[0];
-
-    // Set values.
-    postElement.getElementsByClassName('text')[0].innerText = text;
-    postElement.getElementsByClassName('mdl-card__title-text')[0].innerText = title;
-    postElement.getElementsByClassName('username')[0].innerText = author || 'Anonymous';
-    postElement.getElementsByClassName('avatar')[0].style.backgroundImage = 'url("' +
-        (authorPic || './silhouette.jpg') + '")';
-
-    // Listen for comments.
-    var commentsRef = firebase.database().ref('post-comments/' + postId);
-    commentsRef.on('child_added', function(data) {
-        addCommentElement(postElement, data.key, data.val().text, data.val().author);
-    });
-
-    commentsRef.on('child_changed', function(data) {
-        setCommentValues(postElement, data.key, data.val().text, data.val().author);
-    });
-
-    commentsRef.on('child_removed', function(data) {
-        deleteComment(postElement, data.key);
-    });
-
-    // Listen for likes counts.
-    var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
-    starCountRef.on('value', function(snapshot) {
-        updateStarCount(postElement, snapshot.val());
-    });
-
-    // Listen for the starred status.
-    var starredStatusRef = firebase.database().ref('posts/' + postId + '/stars/' + uid);
-    starredStatusRef.on('value', function(snapshot) {
-        updateStarredByCurrentUser(postElement, snapshot.val());
-    });
-
-    // Keep track of all Firebase reference on which we are listening.
-    listeningFirebaseRefs.push(commentsRef);
-    listeningFirebaseRefs.push(starCountRef);
-    listeningFirebaseRefs.push(starredStatusRef);
-
-    // Create new comment.
-    addCommentForm.onsubmit = function(e) {
-        e.preventDefault();
-        createNewComment(postId, firebase.auth().currentUser.displayName, uid, commentInput.value);
-        commentInput.value = '';
-        commentInput.parentElement.MaterialTextfield.boundUpdateClassesHandler();
-    };
-
-    // Bind starring action.
-    var onStarClicked = function() {
-        var globalPostRef = firebase.database().ref('/posts/' + postId);
-        var userPostRef = firebase.database().ref('/user-posts/' + authorId + '/' + postId);
-        toggleStar(globalPostRef, uid);
-        toggleStar(userPostRef, uid);
-    };
-    unStar.onclick = onStarClicked;
-    star.onclick = onStarClicked;
-
-    // Bind delete action.
-    var onDeleteClicked = function() {
-        var globalPostRef = firebase.database().ref('/posts/' + postId);
-        var userPostRef = firebase.database().ref('/user-posts/' + authorId + '/' + postId);
-        deletePost(globalPostRef);
-        deletePost(userPostRef);
-    };
-    deleteBtn.onclick = onDeleteClicked;
-
-    return postElement;
-}
-
-/**
- * Writes a new comment for the given post.
- */
-function createNewComment(postId, username, uid, text) {
-    firebase.database().ref('post-comments/' + postId).push({
-        text: text,
-        author: username,
-        uid: uid
-    });
-}
-
-/**
- * Updates the starred status of the post.
- */
-function updateStarredByCurrentUser(postElement, starred) {
-    if (starred) {
-        postElement.getElementsByClassName('starred')[0].style.display = 'inline-block';
-        postElement.getElementsByClassName('not-starred')[0].style.display = 'none';
-    } else {
-        postElement.getElementsByClassName('starred')[0].style.display = 'none';
-        postElement.getElementsByClassName('not-starred')[0].style.display = 'inline-block';
-    }
-}
-
-/**
- * Updates the number of stars displayed for a post.
- */
-function updateStarCount(postElement, nbStart) {
-    postElement.getElementsByClassName('star-count')[0].innerText = nbStart;
-}
-
-/**
- * Creates a comment element and adds it to the given postElement.
- */
-function addCommentElement(postElement, id, text, author) {
-    var comment = document.createElement('div');
-    comment.classList.add('comment-' + id);
-    comment.innerHTML = '<span class="username"></span><span class="comment"></span>';
-    comment.getElementsByClassName('comment')[0].innerText = text;
-    comment.getElementsByClassName('username')[0].innerText = author || 'Anonymous';
-
-    var commentsContainer = postElement.getElementsByClassName('comments-container')[0];
-    commentsContainer.appendChild(comment);
-}
-
-/**
- * Sets the comment's values in the given postElement.
- */
-function setCommentValues(postElement, id, text, author) {
-    var comment = postElement.getElementsByClassName('comment-' + id)[0];
-    comment.getElementsByClassName('comment')[0].innerText = text;
-    comment.getElementsByClassName('fp-username')[0].innerText = author;
-}
-
-/**
- * Deletes the comment of the given ID in the given postElement.
- */
-function deleteComment(postElement, id) {
-    var comment = postElement.getElementsByClassName('comment-' + id)[0];
-    comment.parentElement.removeChild(comment);
-}
-
-/**
- * Starts listening for new posts and populates posts lists.
- */
-function startDatabaseQueries() {
-    var myUserId = firebase.auth().currentUser.uid;
-    var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
-    var recentPostsRef = firebase.database().ref('posts').limitToLast(100);
-    var userPostsRef = firebase.database().ref('user-posts/' + myUserId);
-
-    var fetchPosts = function(postsRef, sectionElement) {
-        postsRef.on('child_added', function(data) {
-            var author = data.val().author || 'Anonymous';
-            var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
-            containerElement.insertBefore(
-                createPostElement(data.key, data.val().title, data.val().body, author, data.val().uid, data.val().authorPic),
-                containerElement.firstChild);
-        });
-        postsRef.on('child_changed', function(data) {
-            var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
-            var postElement = containerElement.getElementsByClassName('post-' + data.key)[0];
-            postElement.getElementsByClassName('mdl-card__title-text')[0].innerText = data.val().title;
-            postElement.getElementsByClassName('username')[0].innerText = data.val().author;
-            postElement.getElementsByClassName('text')[0].innerText = data.val().body;
-            postElement.getElementsByClassName('star-count')[0].innerText = data.val().starCount;
-        });
-        postsRef.on('child_removed', function(data) {
-            var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
-            var post = containerElement.getElementsByClassName('post-' + data.key)[0];
-            post.parentElement.removeChild(post);
-        });
-    };
-
-    // Fetching and displaying all posts of each sections.
-    fetchPosts(topUserPostsRef, topUserPostsSection);
-    fetchPosts(recentPostsRef, recentPostsSection);
-    fetchPosts(userPostsRef, userPostsSection);
-
-    // Keep track of all Firebase refs we are listening to.
-    listeningFirebaseRefs.push(topUserPostsRef);
-    listeningFirebaseRefs.push(recentPostsRef);
-    listeningFirebaseRefs.push(userPostsRef);
-}
-
-/**
  * Writes the user's data to the database.
  */
 function writeUserData(userId, name, email, imageUrl) {
@@ -536,58 +109,183 @@ function writeUserData(userId, name, email, imageUrl) {
 }
 
 /**
- * Cleanups the UI and removes all Firebase listeners.
+ * Creates a post element.
  */
-function cleanupUi() {
-    // Remove all previously displayed posts.
-    topUserPostsSection.getElementsByClassName('posts-container')[0].innerHTML = '';
-    recentPostsSection.getElementsByClassName('posts-container')[0].innerHTML = '';
-    userPostsSection.getElementsByClassName('posts-container')[0].innerHTML = '';
+function createPostElement(postId, title, text, author, authorId, authorPic) {
 
-    // Stop all currently listening Firebase listeners.
-    listeningFirebaseRefs.forEach(function(ref) {
-        ref.off();
+    const uid = firebase.auth().currentUser.uid;
+
+    const postEl = document.createElement('article');
+    postEl.setAttribute('data-post-id', postId);
+    postEl.innerHTML = `
+        <header>
+            <h1>${title}</h1>
+            <div class="btn-star-count">0</div>
+            <button class="btn-star"></button>
+            <button class="btn-delete"></button>
+        </header>
+        <section>
+            <img src="${authorPic || 'silhouette.jpg'}">
+            <h2>${author || 'Anonymous'}</h2>
+        </section>
+        <section>
+            <p>${text}</p>
+        </section>
+        <section>
+            <ul class="post-comments"></ul>
+        </section>
+        <section>
+            <form action="#">
+                <input type="text" placeholder="Comment ..." required>
+                <button type="submit">+</button>
+            </form>
+        </section>
+    `;
+
+    // Listen for comments.
+    var commentsRef = firebase.database().ref(`post-comments/${postId}`);
+    commentsRef.on('child_added', data => {
+        const commentEl = document.createElement('li');
+        commentEl.setAttribute('data-comment-id', data.key);
+        commentEl.innerHTML = `
+            <header>
+                <img src="silhouette.jpg">
+                <h3>${data.val().author || 'Anonymous'}</h3>
+                <button class="btn-delete-comment"></button>
+            </header>
+            <span>${data.val().text}</span>
+        `;
+        postEl.querySelector('.post-comments').appendChild(commentEl);
+        commentEl.getElementsByClassName('btn-delete-comment')[0]
+            .addEventListener('click', () => {
+                var commentRef = firebase.database().ref(`post-comments/${postId}/${data.key}`);
+                commentRef.remove();
+            });
     });
-    listeningFirebaseRefs = [];
+    commentsRef.on('child_changed', data => {
+        document.querySelectorAll(`[data-comment-id=${data.key}]`)
+            .forEach(commentEl => {
+                commentEl.querySelector('h3').innerText = data.val().author;
+                commentEl.querySelector('span').innerText = data.val().text;
+            });
+    });
+    commentsRef.on('child_removed', data => {
+        document.querySelectorAll(`[data-comment-id=${data.key}]`)
+            .forEach(commentEl => commentEl.remove());
+    });
+
+    // Listen for newly created comments.
+    postEl.querySelector('form').addEventListener('submit', evt => {
+        evt.preventDefault();
+        const inputEl = evt.target.querySelector('input');
+        firebase.database().ref(`post-comments/${postId}`).push({
+            text: inputEl.value,
+            author: firebase.auth().currentUser.displayName,
+            uid
+        });
+        inputEl.value = '';
+    });
+
+    // Listen for likes counts.
+    const starCountRef = firebase.database().ref(`posts/${postId}/starCount`);
+    starCountRef.on('value', snapshot => {
+        postEl.querySelector('.btn-star-count').innerText = snapshot.val();
+    });
+
+    // Listen for the starred status.
+    const starredStatusRef = firebase.database().ref(`posts/${postId}/stars/${uid}`);
+    starredStatusRef.on('value', snapshot => {
+        const classNameChange = snapshot.val() ? 'add' : 'remove';
+        postEl.querySelector('.btn-star').classList[classNameChange]('is-active');
+    });
+
+    // Keep track of all Firebase reference on which we are listening.
+    listeningFirebaseRefs.push(commentsRef);
+    listeningFirebaseRefs.push(starCountRef);
+    listeningFirebaseRefs.push(starredStatusRef);
+
+    // Bind post actions.
+    const globalPostRef = firebase.database().ref(`/posts/${postId}`);
+    const userPostRef = firebase.database().ref(`/user-posts/${authorId}/${postId}`);
+    postEl.getElementsByClassName('btn-star')[0]
+        .addEventListener('click', () => {
+            [globalPostRef, userPostRef].forEach(postRef => {
+                postRef.transaction(post => {
+                    if (post) {
+                        if (post.stars && post.stars[uid]) {
+                            post.starCount--;
+                            post.stars[uid] = null;
+                        } else {
+                            post.starCount++;
+                            if (!post.stars) {
+                                post.stars = {};
+                            }
+                            post.stars[uid] = true;
+                        }
+                    }
+                    return post;
+                });
+            });
+        });
+    postEl.getElementsByClassName('btn-delete')[0]
+        .addEventListener('click', () => {
+            globalPostRef.remove();
+            userPostRef.remove();
+        });
+
+    return postEl;
 }
 
 /**
- * The ID of the currently signed-in User. We keep track of this to detect Auth state change events that are just
- * programmatic token refresh but not a User status change.
+ * Starts listening for new posts and populates posts lists.
  */
-var currentUID;
+function startDatabaseQueries() {
 
-/**
- * Triggers every time there is a change in the Firebase auth state (i.e. user signed-in or user signed out).
- */
-async function onAuthStateChanged(user) {
-    // We ignore token refresh events.
-    if (user && currentUID === user.uid) {
-        return;
-    }
+    const myUserId = firebase.auth().currentUser.uid;
+    const topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
+    const recentPostsRef = firebase.database().ref('posts').limitToLast(100);
+    const userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
-    cleanupUi();
-    if (user) {
-        currentUID = user.uid;
-        splashPage.style.display = 'none';
-        await writeUserData(user.uid, user.displayName, user.email, user.photoURL);
-        var apiKey = await ensureUserApiKey(user.uid);
-        await ensureAppmixerVirtualUser(user.uid, apiKey);
-        await ensureAppmixerServiceAccount(apiKey);
-        startDatabaseQueries();
+    const fetchPosts = (postsRef, sectionElement) => {
 
-    } else {
-        // Set currentUID to null.
-        currentUID = null;
-        // Display the splash page where you can sign-in.
-        splashPage.style.display = '';
-    }
+        postsRef.on('child_added', data => {
+            const author = data.val().author || 'Anonymous';
+            const containerElement = sectionElement.getElementsByClassName('posts-container')[0];
+            containerElement.insertBefore(
+                createPostElement(data.key, data.val().title, data.val().body, author, data.val().uid, data.val().authorPic),
+                containerElement.firstChild);
+        });
+        postsRef.on('child_changed', data => {
+            document.querySelectorAll(`[data-post-id=${data.key}]`)
+                .forEach(postElement => {
+                    postElement.querySelector('h1').innerText = data.val().title;
+                    postElement.querySelector('h2').innerText = data.val().author;
+                    postElement.querySelector('p').innerText = data.val().body;
+                    postElement.querySelector('.btn-star-count').innerText = data.val().starCount;
+                });
+        });
+        postsRef.on('child_removed', data => {
+            document.querySelectorAll(`[data-post-id=${data.key}]`)
+                .forEach(postElement => postElement.remove());
+        });
+    };
+
+    // Fetching and displaying all posts of each sections.
+    fetchPosts(topUserPostsRef, document.getElementById('page-top-posts'));
+    fetchPosts(recentPostsRef, document.getElementById('page-recent'));
+    fetchPosts(userPostsRef, document.getElementById('page-posts'));
+
+    // Keep track of all Firebase refs we are listening to.
+    listeningFirebaseRefs.push(topUserPostsRef);
+    listeningFirebaseRefs.push(recentPostsRef);
+    listeningFirebaseRefs.push(userPostsRef);
 }
 
 /**
  * Creates a new post for the current user.
  */
 function newPostForCurrentUser(title, text) {
+
     var userId = firebase.auth().currentUser.uid;
     return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
         var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
@@ -598,94 +296,255 @@ function newPostForCurrentUser(title, text) {
 }
 
 /**
- * Displays the given section element and changes styling of the given button.
+ * Clear all rendered posts.
  */
-function showSection(sectionElement, buttonElement) {
-    recentPostsSection.style.display = 'none';
-    userPostsSection.style.display = 'none';
-    topUserPostsSection.style.display = 'none';
-    addPost.style.display = 'none';
-    integrationsSection.style.display = 'none';
-    automationsSection.style.display = 'none';
-    addButton.style.display = 'none';
-    recentMenuButton.classList.remove('is-active');
-    myPostsMenuButton.classList.remove('is-active');
-    myTopPostsMenuButton.classList.remove('is-active');
-    myIntegrationsMenuButton.classList.remove('is-active');
-    myAutomationsMenuButton.classList.remove('is-active');
-    addButton.style.display = 'none';
+function clearPosts() {
 
-    closeAppmixerWidgets();
-
-    if (sectionElement) {
-        sectionElement.style.display = 'block';
-    }
-    if (buttonElement) {
-        buttonElement.classList.add('is-active');
-    }
+    const containers = document.querySelectorAll('.posts-container');
+    // Remove all previously displayed posts.
+    containers.forEach(el => el.innerHTML = '');
 }
 
-// Bindings on load.
-window.addEventListener('load', function() {
-    // Bind Sign in button.
-    signInButton.addEventListener('click', function() {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider);
-    });
+/**
+ * Setup Integrations page.
+ */
+function setupIntegrationsPage() {
 
-    // Bind Sign out button.
-    signOutButton.addEventListener('click', function() {
-        firebase.auth().signOut();
-    });
-
-    // Listen for auth state changes
-    firebase.auth().onAuthStateChanged(onAuthStateChanged);
-
-    // Saves message on form submit.
-    messageForm.onsubmit = function(e) {
-        e.preventDefault();
-        var text = messageInput.value;
-        var title = titleInput.value;
-        if (text && title) {
-            newPostForCurrentUser(title, text).then(function() {
-                myPostsMenuButton.click();
-            });
-            messageInput.value = '';
-            titleInput.value = '';
+    widgets.integrations.set('options', {
+        showHeader: false,
+        customFilter: {
+            // Show only integration templates shared with users in this demo app.
+            'sharedWith.0.domain': APPMIXER_USER_DOMAIN,
+            // Show Integration templates only. Template don't have `templateId`,
+            // only instances do to reference templates they were created from.
+            templateId: '!'
         }
-    };
+    });
+}
 
-    // Bind menu buttons.
-    recentMenuButton.onclick = function() {
-        showSection(recentPostsSection, recentMenuButton);
-        addButton.style.display = 'block';
-    };
-    myPostsMenuButton.onclick = function() {
-        showSection(userPostsSection, myPostsMenuButton);
-        addButton.style.display = 'block';
-    };
-    myTopPostsMenuButton.onclick = function() {
-        showSection(topUserPostsSection, myTopPostsMenuButton);
-        addButton.style.display = 'block';
-    };
-    myIntegrationsMenuButton.onclick = function() {
-        showSection(integrationsSection, myIntegrationsMenuButton);
-        showIntegrations();
-    };
-    myAutomationsMenuButton.onclick = function() {
-        showSection(automationsSection, myAutomationsMenuButton);
-        showFlows();
-    };
-    addButton.onclick = function() {
-        showSection(addPost);
-        messageInput.value = '';
-        titleInput.value = '';
-    };
-    recentMenuButton.onclick();
-}, false);
+/**
+ * Setup Enabled Integrations page.
+ */
+function setupEnabledIntegrationsPage() {
 
+    widgets.integrations.set('options', {
+        showHeader: false,
+        customFilter: {
+            // Show only my instances. Not all flows that have been possibly shared with me in the Studio.
+            userId: appmixer.get('user').id,
+            // Show Integration instances only. Instances have `templateId`
+            // to reference the template they were created from.
+            templateId: '>0'
+        }
+    });
+}
 
+/**
+ * Setup Automations page.
+ */
+function setupAutomationsPage() {
+
+    widgets.automations.set('options', {
+        customFilter: {
+            // Show only my flows.
+            userId: appmixer.get('user').id,
+            // Filter out integration templates (i.e. flows that have a Wizard defined).
+            'wizard.fields': '!'
+        },
+        menu: [
+            { event: 'flow:open', label: 'Open' },
+            { event: 'flow:rename', label: 'Rename' },
+            { event: 'flow:remove', label: 'Delete' }
+        ]
+    });
+}
+
+/**
+ * Setup Designer page.
+ */
+function setupDesignerPage(route) {
+
+    const [, flowId, componentId] = route.split('/');
+    widgets.designer.set('flowId', flowId);
+    widgets.designer.set('componentId', componentId);
+}
+
+/**
+ * Navigate pages and panels.
+ */
+function navigate() {
+
+    // Deactive anchors.
+    const anchors = document.querySelectorAll('a, .page');
+    anchors.forEach(el => el.classList.remove('is-active'));
+
+    // Close widgets.
+    Object.values(widgets).forEach(w => w.close());
+
+    // Hide pages.
+    pages.forEach(page => {
+        const el = document.getElementById(`page-${page}`);
+        el.classList.remove('is-active');
+    });
+
+    // Get navigation details for the route.
+    const route = window.location.hash.substring(1);
+    const pageIndex = pages.indexOf(route.split('/')[0]);
+    const page = pageIndex === -1 ? pages[0] : pages[pageIndex];
+
+    // Show container element of the page.
+    const pageContainer = document.getElementById(`page-${page}`);
+    pageContainer.classList.add('is-active');
+
+    // Active links that match the route.
+    const links = document.querySelectorAll(`a[href$="#${route}"]`);
+    links.forEach(el => el.classList.add('is-active'));
+
+    // Setup the page.
+    if (route === 'recent') {
+        //
+    } else if (route === 'posts') {
+        //
+    } else if (route === 'top-posts') {
+        //
+    } else if (route === 'integrations') {
+        setupIntegrationsPage();
+    } else if (route === 'integrations/enabled') {
+        setupEnabledIntegrationsPage();
+    } else if (route === 'automations') {
+        setupAutomationsPage();
+    } else if (route.startsWith('designer')) {
+        setupDesignerPage(route);
+    }
+
+    // Open a widget if the page has one.
+    const widget = widgets[page];
+    if (widget) widget.open();
+}
+
+/**
+ * Create widgets.
+ */
+function createWidgets() {
+
+    // Create Integrations Page widget.
+    widgets.integrations = appmixer.ui.Integrations({
+        el: '#appmixer-integrations',
+        theme: {
+            variables: {
+                colors: {
+                    surface: 'transparent',
+                    above: '#FFFFFF'
+                }
+            },
+            ui: {
+                '#Integrations': {
+                    '#integration': {
+                        outline: 'none',
+                        border: 'none',
+                        "@hovered": {
+                            outline: 'solid 4px #839CF8',
+                            border: 'none'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    widgets.integrations.on('integration:create', templateId => {
+        widgets.wizard.close();
+        widgets.wizard.set('flowId', templateId);
+        widgets.wizard.open();
+    });
+    widgets.integrations.on('integration:edit', integrationId => {
+        widgets.wizard.close();
+        widgets.wizard.set('flowId', integrationId);
+        widgets.wizard.open();
+    });
+
+    // Create Wizard Page widget.
+    widgets.wizard = appmixer.ui.Wizard();
+    widgets.wizard.on('flow:start-after', () => widgets.integrations.reload());
+    widgets.wizard.on('flow:remove-after', () => {
+        widgets.integrations.reload();
+        widgets.wizard.close();
+    });
+
+    // Create Automations Page widget.
+    widgets.automations = appmixer.ui.FlowManager({
+        el: '#appmixer-flow-manager',
+        theme: {
+            variables: {
+                colors: {
+                    focus: '#3B77E7',
+                    neutral: '#323947',
+                    surface: '#FFFFFF',
+                    above: '#FFFFFF'
+                }
+            }
+        },
+        l10n: {
+            ui: {
+                flowManager: {
+                    header: {
+                        title: 'Automations',
+                        buttonCreateFlow: 'Create Automation'
+                    }
+                }
+            }
+        }
+    });
+    widgets.automations.on('flow:open', flowId => {
+        location.href = `#designer/${flowId}`;
+    });
+
+    // Create Designer Page widget.
+    widgets.designer = appmixer.ui.Designer({
+        el: '#appmixer-designer',
+        theme: {
+            variables: {
+                colors: {
+                    focus: '#3B77E7',
+                    neutral: '#323947'
+                }
+            }
+        },
+        options: {
+            showButtonHome: true,
+            menu: [
+                { event: 'flow:rename', label: 'Rename' }
+            ],
+            toolbar: [
+                ['undo', 'redo'],
+                ['zoom-to-fit', 'zoom-in', 'zoom-out'],
+                ['logs']
+            ]
+        }
+    });
+    widgets.designer.on('navigate:flows', () => {
+        window.location.href = '#automations';
+    });
+    widgets.designer.on('component:open', evt => {
+        const flowId = widgets.designer.get('flowId');
+        if (window.history.replaceState) {
+            window.history.replaceState({}, null, `#designer/${flowId}/${evt.data.componentId}`);
+        }
+        evt.next();
+    });
+    widgets.designer.on('component:close', evt => {
+        const flowId = widgets.designer.get('flowId');
+        if (window.history.replaceState) {
+            window.history.replaceState({}, null, `#designer/${flowId}`);
+        }
+        evt.next();
+    });
+}
+
+/**
+ * Ensure user API key.
+ */
 async function ensureUserApiKey(userId) {
+
     var snapshot = await firebase.database().ref('/users/' + userId).once('value');
     var apiKey = snapshot.val() && snapshot.val().apiKey;
     if (!apiKey) {
@@ -696,18 +555,11 @@ async function ensureUserApiKey(userId) {
     return apiKey;
 }
 
-// Appmixer helper functions.
-// --------------------------
-
-var appmixerWidgets = {
-    designer: null,
-    flowManager: null,
-    integrationTemplates: null,
-    integrationInstances: null,
-    wizard: null
-};
-
+/**
+ * Ensure Appmixer Virtual User.
+ */
 async function ensureAppmixerVirtualUser(userId, apiKey) {
+
     // Appmixer username can be any, even non-existing, email address. We're using the user ID
     // together with a fictional domain name. Appmixer does not send anything to these email addresses.
     // They are just used as a virtual user credentials pair.
@@ -734,7 +586,11 @@ async function ensureAppmixerVirtualUser(userId, apiKey) {
     }
 }
 
+/**
+ * Ensure Appmixer service account.
+ */
 async function ensureAppmixerServiceAccount(apiKey) {
+
     // This function makes sure that the user has their own Demo App user account registered with Appmixer. This is useful so that
     // the user does not have to authenticate to Demo App in Appmixer Integrations/Wizard again. This would not make sense since the
     // user is already signed in and so we don't want to request their API key again in Appmixer Wizard. Instead, assuming
@@ -760,118 +616,82 @@ async function ensureAppmixerServiceAccount(apiKey) {
     }
 }
 
-function closeAppmixerWidgets() {
-    Object.keys(appmixerWidgets).forEach(function(widget) {
-        if (appmixerWidgets[widget]) {
-            appmixerWidgets[widget].close();
-        }
+/**
+ * Triggers every time there is a change in the Firebase auth state (i.e. user signed-in or user signed out).
+ */
+async function onAuthStateChanged(user) {
+
+    // We ignore token refresh events.
+    if (user && currentUID === user.uid) {
+        return;
+    }
+
+    // Stop all currently listening Firebase listeners.
+    listeningFirebaseRefs.forEach(function(ref) {
+        ref.off();
     });
+    listeningFirebaseRefs = [];
+
+    // Clear posts.
+    clearPosts();
+
+    // Authenticate the user and load the initial state.
+    const splashPage = document.getElementById('splash-page');
+    if (user) {
+        currentUID = user.uid;
+        splashPage.style.display = 'none';
+        try {
+            await writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+            const apiKey = await ensureUserApiKey(user.uid);
+            await ensureAppmixerVirtualUser(user.uid, apiKey);
+            await ensureAppmixerServiceAccount(apiKey);
+        } catch {}
+        startDatabaseQueries();
+    } else {
+        // Set currentUID to null.
+        currentUID = null;
+        // Display the splash page where you can sign-in.
+        splashPage.style.display = 'flex';
+    }
+
+    // Use the initial event to setup the application.
+    if (!appHasAuthState) {
+        appHasAuthState = true;
+        window.onhashchange = navigate;
+        createWidgets();
+    }
+
+    navigate();
 }
 
-function showIntegrations() {
+window.addEventListener('load', async () => {
 
-    if (!appmixerWidgets.wizard) {
-        appmixerWidgets.wizard = appmixer.ui.Wizard();
-        // Make sure our list of integration instances is refreshed when integration is started or removed.
-        // Note that we're using start-after and remove-after events. This is because by default, the wizard
-        // does all the API calls to start or remove flows for us. It is also possible to redefine these events start/remove
-        // and use the appmixer.api module to start/remove flows manually.
-        appmixerWidgets.wizard.on('flow:start-after', () => appmixerWidgets.integrationInstances.reload());
-        appmixerWidgets.wizard.on('flow:remove-after', () => {
-            appmixerWidgets.integrationInstances.reload();
-            appmixerWidgets.wizard.close();
+    // Bind Sign in button.
+    document.getElementById('sign-in-button')
+        .addEventListener('click', () => {
+            const authProvider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(authProvider);
         });
-    }
-    if (!appmixerWidgets.integrationTemplates) {
-        appmixerWidgets.integrationTemplates = appmixer.ui.Integrations({
-            el: '#appmixer-integration-templates',
-            options: {
-                showHeader: false,
-                customFilter: {
-                    'sharedWith.0.domain': APPMIXER_USER_DOMAIN,     // Show only integration templates shared with users in this demo app.
-                    'templateId': '!'       // Show Integration templates only. Template don't have `templateId`, only instances do to reference templates they were created from.
-                }
+
+    // Bind Sign out button.
+    document.getElementById('sign-out-button')
+        .addEventListener('click', function() {
+            firebase.auth().signOut();
+        });
+
+    // Bind New Post form.
+    document.getElementById('new-post-form')
+        .addEventListener('submit', evt => {
+            evt.preventDefault();
+            const title = evt.target.querySelector('#new-post-title').value;
+            const message = evt.target.querySelector('#new-post-message').value;
+            if (title.length && message.length) {
+                newPostForCurrentUser(title, message).then(() => {
+                    location.href = '#posts';
+                });
             }
-        });
-        appmixerWidgets.integrationTemplates.on('integration:create', (templateId) => {
-            appmixerWidgets.wizard.close();
-            appmixerWidgets.wizard.set('flowId', templateId);
-            appmixerWidgets.wizard.open();
-        });
-    }
-    if (!appmixerWidgets.integrationInstances) {
-        appmixerWidgets.integrationInstances = appmixer.ui.Integrations({
-            el: '#appmixer-integration-instances',
-            options: {
-                showHeader: false,
-                customFilter: {
-                    userId: appmixer.get('user').id,        // Show only my instances. Not all flows that have been possibly shared with me in the Studio.
-                    'templateId': '>0'      // Show Integration instances only. Instances have `templateId` to reference the template they were created from.
-                }
-            }
-        });
-        appmixerWidgets.integrationInstances.on('integration:edit', (integrationId) => {
-            appmixerWidgets.wizard.close();
-            appmixerWidgets.wizard.set('flowId', integrationId);
-            appmixerWidgets.wizard.open();
-        });
-    }
-    appmixerWidgets.integrationTemplates.open();
-    appmixerWidgets.integrationInstances.open();
-}
+        });    
 
-
-
-async function showFlows() {
-    if (!appmixerWidgets.flowManager) {
-        appmixerWidgets.flowManager = appmixer.ui.FlowManager({
-            el: '#appmixer-flowmanager',
-            options: {
-                showHeader: false,
-                menu: [ { label: 'Delete', event: 'flow:remove' } ],
-                customFilter: {
-                    userId: appmixer.get('user').id, // Show only my flows.
-                    'wizard.fields': '!'     // Filter out integration templates (i.e. flows that have a Wizard defined).
-                }
-            }
-        });
-        // Note: flow:start, flow:stop, flow:remove is handled implicitely since we're not overriding the behaviour here.
-        appmixerWidgets.flowManager.on('flow:create', async () => {
-            try {
-                appmixerWidgets.flowManager.state('loader', true);
-                var flowId = await appmixer.api.createFlow('New flow');
-                appmixerWidgets.flowManager.state('loader', false);
-                appmixerWidgets.designer.set('flowId', flowId);
-                appmixerWidgets.flowManager.close();
-                appmixerWidgets.designer.open();
-            } catch (err) { onerror(err) }
-        });
-        appmixerWidgets.flowManager.on('flow:open', (flowId) => {
-            appmixerWidgets.designer.set('flowId', flowId);
-            appmixerWidgets.flowManager.close();
-            appmixerWidgets.designer.open();
-        });
-    }
-    appmixerWidgets.designer = appmixerWidgets.designer || appmixer.ui.Designer({
-        el: '#appmixer-designer',
-        options: {
-            showHeader: true,
-            showButtonHome: false,
-            showButtonInsights: false,
-            showButtonConnectors: false,
-            menu: [
-                { event: 'flow:rename', label: 'Rename' }
-            ],
-            toolbar: [
-                ['undo', 'redo'],
-                ['zoom-to-fit', 'zoom-in', 'zoom-out'],
-                ['logs']
-            ]
-        }
-    });
-    appmixerWidgets.flowManager.open();
-}
-
-function onerror(err) {
-    alert(err);
-}
+    // Listen for authentication state changes.
+    firebase.auth().onAuthStateChanged(onAuthStateChanged);
+});
