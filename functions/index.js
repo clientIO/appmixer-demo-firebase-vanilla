@@ -131,6 +131,11 @@ const notifyWebhooks = async (event, data, userId) => {
             // User check required (for my-* events) and it's not a post of a user that created the webhook. Skip.
             continue;
         }
-        axios.post(webhook.url, { event, data });
+        let res;
+        try {
+            res = await axios.post(webhook.url, { event, data });
+        } catch (err) {
+            functions.logger.error('Error notifying webhook', webhook.url, 'for event', event, 'with data', data, 'for user', userId, err, 'response', res);
+        }
     }
 };
