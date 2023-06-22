@@ -432,27 +432,7 @@ function createWidgets() {
 
     // Create Integrations Page widget.
     widgets.integrations = appmixer.ui.Integrations({
-        el: '#appmixer-integrations',
-        theme: {
-            variables: {
-                colors: {
-                    surface: 'transparent',
-                    above: '#FFFFFF'
-                }
-            },
-            ui: {
-                '#Integrations': {
-                    '#integration': {
-                        outline: 'none',
-                        border: 'none',
-                        "@hovered": {
-                            outline: 'solid 4px #839CF8',
-                            border: 'none'
-                        }
-                    }
-                }
-            }
-        }
+        el: '#appmixer-integrations'
     });
     widgets.integrations.on('integration:create', templateId => {
         widgets.wizard.close();
@@ -481,11 +461,11 @@ function createWidgets() {
             variables: {
                 colors: {
                     separator: '#6E8BD3',
+                    surfaceLow: '#3265CB',
                     surface: '#3265CB',
-                    base: '#3265CB',
                     neutral: '#FFFFFF',
-                    focus: '#FFFFFF',
-                    focusNG: '#3265CB'
+                    primary: '#FFFFFF',
+                    onPrimary: '#3265CB'
                 }
             }
         },
