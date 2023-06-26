@@ -447,10 +447,19 @@ main {
 div.am-integrations {
   position: static;
   overflow: visible;
+  background: transparent !important;
 }
 div.am-integrations__grid,
 div.am-integrations__grid:first-child {
+  background: transparent !important;
   padding: 0;
+}
+div.am-integration-tile {
+  outline: none;
+  border: none;
+}
+div.am-integration-tile:hover {
+  outline: solid 4px #839CF8;
 }
 
 /* Automations page */
