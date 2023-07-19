@@ -432,7 +432,28 @@ function createWidgets() {
 
     // Create Integrations Page widget.
     widgets.integrations = appmixer.ui.Integrations({
-        el: '#appmixer-integrations'
+        el: '#appmixer-integrations',
+        theme: {
+            variables: {
+                colors: {
+                    surface: 'transparent',
+                    above: '#FFFFFF'
+                },
+            },
+            ui: {
+                '#Integrations': {
+                    '#integration': {
+                        outline: 'none',
+                        border: 'none',
+                        borderRadius: '9px',
+                        boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.12) 0px 1px 3px 1px',
+                        '@hovered': {
+                            boxShadow: 'rgba(60, 64, 67, 0.15) 0px 3px 9px 0px, rgba(60, 64, 67, 0.12) 0px 3px 12px 1px',
+                        }
+                    }
+                }
+            }
+        }
     });
     widgets.integrations.on('integration:create', templateId => {
         widgets.wizard.close();
@@ -457,15 +478,36 @@ function createWidgets() {
     widgets.automations = appmixer.ui.FlowManager({
         el: '#appmixer-flow-manager',
         theme: {
-            mode: 'dark',
+            mode: 'light',
             variables: {
                 colors: {
-                    separator: '#6E8BD3',
-                    surfaceLow: '#3265CB',
-                    surface: '#3265CB',
-                    neutral: '#FFFFFF',
-                    primary: '#FFFFFF',
-                    onPrimary: '#3265CB'
+                    separator: '#d2d2d2',
+                    surface: 'white',
+                    base: 'white',
+                    focus: '#FFFFFF',
+                    focusNG: 'white'
+                }
+            },
+            ui: {
+                '#FlowManager': {
+                    '#header': {
+                        '#buttonCreateFlow': {
+                            color: 'white',
+                            background: '#FFA000',
+                            transition: '300ms',
+                            '@hovered': {
+                                background: '#F57F17'
+                            }
+                        }
+                    },
+                    '#grid': {
+                        '#table': {
+                            '#searchbar': {
+                                border: 'solid 1px rgb(210, 210, 210)',
+                                borderRadius: '3px',
+                            }
+                        }
+                    },
                 }
             }
         },

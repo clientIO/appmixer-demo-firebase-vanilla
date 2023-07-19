@@ -21,7 +21,10 @@
   --color-primary-lighter: #3B77E7;
   --color-neutral-dark: #323947;
   --color-neutral-base: #444655;
-  --base-section-width: 1050px;
+  --color-grey: #9A9A9A;
+  --color-black: #5F6368;
+  --color-white: white;
+  --base-section-width: 90%;
   --main-header-height: 56px;
 }
 
@@ -50,7 +53,7 @@ a {
   font-weight: 500;
   font-size: 0.96em;
   text-decoration: none;
-  color: #5F6368;
+  color: var(--color-black);
 }
 a.is-active {
   color: #202124;
@@ -83,7 +86,7 @@ button {
   width: 100%;
   box-sizing: border-box;
   height: var(--main-header-height);
-  padding: 0 16px 0 24px;
+  padding: 0 58px 0 24px;
   box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 2px 6px 2px rgba(60,64,67,.3);
   background: white;
 }
@@ -148,12 +151,16 @@ main {
   align-items: center;
   height: 100%;
   width: 100%;
-  background: var(--color-primary);
+  background: white;
 }
 #splash-page > h1 {
   font-size: 24px;
   font-weight: 500;
-  color: white;
+  color: black;
+}
+
+#splash-page p {
+    color: black !important;
 }
 
 /* Sign-In button  */
@@ -180,19 +187,22 @@ main {
 /* Sign-Out button  */
 #sign-out-button {
   height: 40px;
-  padding: 0 10px;
   color: var(--color-primary);
+  transition: 300ms;
 }
 #sign-out-button:hover,
 #sign-out-button:focus {
-  background: #EAEFFA;
+  color: #5483ff;
 }
 
 /* Add Post button  */
 #add-post-button {
     display: inline-block;
-    width: 36px;
-    height: 36px;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    width: 60px;
+    height: 60px;
     margin-right: 16px;
     background: #FFA000 url('assets/post-add-white.svg') no-repeat center center;
     background-size: 18px;
@@ -209,7 +219,7 @@ main {
 
 /* New Post page */
 #page-new-post {
-    background: var(--color-neutral-base);
+    background: #939393;
 }
 #page-new-post dialog {
     display: block;
@@ -260,7 +270,7 @@ main {
 #page-recent,
 #page-posts,
 #page-top-posts {
-    background: var(--color-primary);
+    background: var(--color-white);
 }
 .posts-container {
     display: grid;
@@ -268,7 +278,7 @@ main {
     grid-gap: 24px;
     width: var(--base-section-width);
     padding: 32px 0;
-    margin: 0 auto;
+    margin: 0 58px;
 }
 .posts-container article {
     display: flex;
@@ -276,6 +286,7 @@ main {
     height: 100%;
     border-radius: 6px;
     background: white;
+    box-shadow: rgba(60,64,67,0.3) 0 1px 2px 0, rgba(60,64,67,0.12) 0 1px 3px 1px;
 }
 .posts-container article > header {
     display: flex;
@@ -424,16 +435,16 @@ main {
 
 /* Integrations page */
 #page-integrations {
-  background: var(--color-primary);
+  background: var(--color-white);
 }
 #page-integrations > nav {
   width: var(--base-section-width);
   padding-top: 32px;
-  margin: 0 auto;
+  margin: 0 58px;
 }
 #page-integrations > nav > a {
   margin-right: 24px;
-  color: white;
+  color: var(--color-black);
   opacity: 0.72;
 }
 #page-integrations > nav > a.is-active {
@@ -442,7 +453,7 @@ main {
 #page-integrations > section {
   width: var(--base-section-width);
   padding: 32px 0 24px;
-  margin: 0 auto;
+  margin: 0 58px;
 }
 div.am-integrations {
   position: static;
@@ -457,6 +468,7 @@ div.am-integrations__grid:first-child {
 div.am-integration-tile {
   outline: none;
   border: none;
+  transition: all .3s cubic-bezier(.16,1,.3,1);
 }
 div.am-integration-tile:hover {
   outline: solid 4px #839CF8;
@@ -464,15 +476,40 @@ div.am-integration-tile:hover {
 
 /* Automations page */
 #page-automations {
-  background: var(--color-primary);
+  background: var(--color-white);
 }
 #page-automations > section {
-  width: var(--base-section-width);
-  padding: 24px 0;
-  margin: 0 auto;
+   margin: 0 58px;
 }
 div.am-flow-manager {
-  position: static;
+    position: static;
+    overflow: visible !important;
+}
+.am-flow-manager-grid {
+    overflow: visible !important;
+}
+.am-flow-manager-grid__content {
+    overflow: visible !important;
+}
+div.am-flow-manager-header, div.am-flow-manager-grid__header, div.am-flow-manager-grid__flows {
+    padding-right: 0;
+    padding-left: 0;
+}
+.am-flow-manager-grid-flow {
+    border-radius: 9px;
+    box-shadow: rgba(60,64,67,0.3) 0 1px 2px 0px, rgba(60,64,67,0.12) 0 1px 3px 1px;
+}
+.am-flow-manager-grid-flow:hover {
+    box-shadow: rgba(60,64,67,0.15) 0 3px 9px 0px, rgba(60,64,67,0.12) 0 3px 12px 1px;
+}
+.am-input-search {
+    border: none !important;
+}
+.am-table-searchbar {
+    border-radius: 3px;
+}
+.am-button-switch__button {
+    border-color: black !important;
 }
 
 /* Designer page */
@@ -483,4 +520,9 @@ div.am-flow-manager {
   bottom: 0;
   left: 0;
   min-height: auto;
+}
+
+/* Wizard modal */
+div.am-wizard-modal-backdrop {
+    background: rgba(0, 0, 0, 0.55) !important;
 }

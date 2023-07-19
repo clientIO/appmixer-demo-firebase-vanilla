@@ -21,49 +21,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="msapplication-tap-highlight" content="no">
   <meta name="description" content="Demonstrates the use of Google Cloud Database with a Firebase DB">
-  <title>Appmixer Embedding Quickstart</title>
+  <title>Appmixer Stickies</title>
   <link rel="stylesheet" href="main.css">
   <link rel="icon" href="favicon.ico"/>
 </head>
 <body>
 <!-- Splash Page -->
 <div id="splash-page">
-  <h1>Appmixer Embedding Quickstart</h1>
+  <img src="https://am-demo-firebase-vanilla.web.app/assets/firebase-logo.svg" alt="Appmixer Stickies" width="60"
+       height="60" style="margin:10px 10px 10px 10px">
+  <h1>Appmixer Stickies</h1>
+  <p style="max-width: 600px; color: white; text-align: center; line-height: 1.5">
+    Welcome to Appmixer Stickies! The purpose of this app is to showcase the main Appmixer features: automation
+    designer and integration templates. Sign in, create sticky notes and automate work around them, such as sending
+    notifications. Let's get started!
+  </p>
   <button id="sign-in-button">Sign in with Google</button>
 </div>
 
 <header id="main-header">
-  <h1>Appmixer Embedding Quickstart</h1>
+  <h1>Appmixer Stickies</h1>
   <!-- Navigation Bar -->
   <nav>
-      <a href="#recent">Recent</a>
-      <a href="#posts">My Posts</a>
-      <a href="#integrations">My Integrations</a>
-      <a href="#automations">My Automations</a>
+    <a href="#recent">Recent</a>
+    <a href="#posts">My Posts</a>
+    <a href="#integrations">My Integrations</a>
+    <a href="#automations">My Automations</a>
   </nav>
 
-  <a id="add-post-button" href="#new-post"></a>
   <button id="sign-out-button">Sign out</button>
 </header>
 
 <main>
   <!-- New Post Page -->
   <div id="page-new-post" class="page">
-      <dialog>
-        <form id="new-post-form" action="#">
-          <h1>New Post</h1>
-          <label for="new-post-title">Title</label>
-          <input id="new-post-title" type="text" required>
-          <label for="new-post-message">Message</label>
-          <textarea id="new-post-message" required></textarea>
-          <button type="submit">Add Post</button>
-        </form>
+    <dialog>
+      <form id="new-post-form" action="#">
+        <h1>New Post</h1>
+        <label for="new-post-title">Title</label>
+        <input id="new-post-title" type="text" required>
+        <label for="new-post-message">Message</label>
+        <textarea id="new-post-message" required></textarea>
+        <button type="submit">Add Post</button>
+      </form>
     </dialog>
   </div>
 
   <!-- Recent Posts Page -->
   <div id="page-recent" class="page">
-      <div class="posts-container"></div>
+    <div class="posts-container"></div>
   </div>
 
   <!-- Posts Page -->
@@ -73,28 +79,30 @@
 
   <!-- Integrations Page -->
   <div id="page-integrations" class="page">
-      <nav>
-          <a href="#integrations">All Integrations</a>
-          <a href="#integrations/enabled">Enabled Integrations</a>
-      </nav>
-      <section>
-          <div id="appmixer-integrations"></div>
-      </section>
+    <nav>
+      <a href="#integrations">All Integrations</a>
+      <a href="#integrations/enabled">Enabled Integrations</a>
+    </nav>
+    <section>
+      <div id="appmixer-integrations"></div>
+    </section>
   </div>
 
   <!-- Automations Page -->
   <div id="page-automations" class="page">
-      <section>
-          <div id="appmixer-flow-manager"></div>
-      </section>
+    <section>
+      <div id="appmixer-flow-manager"></div>
+    </section>
   </div>
 
   <!-- Designer Page -->
   <div id="page-designer" class="page">
-      <section>
-          <div id="appmixer-designer"></div>
-      </section>
+    <section>
+      <div id="appmixer-designer"></div>
+    </section>
   </div>
+
+  <a id="add-post-button" href="#new-post"></a>
 </main>
 
 <!-- Import and configure the Firebase SDK -->
