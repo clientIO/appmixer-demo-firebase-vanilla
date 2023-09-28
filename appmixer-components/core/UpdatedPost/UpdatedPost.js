@@ -5,7 +5,8 @@ module.exports = {
     async receive(context) {
         if (context.messages.webhook) {
             const body = context.messages.webhook.content.data;
-            return context.sendJson(body.data, 'out');
+            await context.sendJson(body.data, 'out');
+            return context.response();
         }
     },
 

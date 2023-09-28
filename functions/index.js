@@ -97,28 +97,28 @@ app.delete('/webhooks/:event/:id', async (req, res) => {
 
 exports.api = functions.https.onRequest(app);
 
-exports.onPostCreated = functions.database.ref('/posts/{postId}').onCreate((snapshot, context) => {
+exports.onPostCreated = functions.database.ref('/posts/{postId}').onCreate(async (snapshot, context) => {
     const postId = context.params.postId;
     const post = snapshot.val();
     post.id = postId;
-    notifyWebhooks('post-created', post);
-    notifyWebhooks('my-post-created', post, post.uid);
+    await notifyWebhooks('post-created', post);
+    await notifyWebhooks('my-post-created', post, post.uid);
 });
 
-exports.onPostDeleted = functions.database.ref('/posts/{postId}').onDelete((snapshot, context) => {
+exports.onPostDeleted = functions.database.ref('/posts/{postId}').onDelete(async (snapshot, context) => {
     const postId = context.params.postId;
     const post = snapshot.val();
     post.id = postId;
-    notifyWebhooks('post-deleted', post);
-    notifyWebhooks('my-post-deleted', post, post.uid);
+    await notifyWebhooks('post-deleted', post);
+    await notifyWebhooks('my-post-deleted', post, post.uid);
 });
 
-exports.onPostUpdated = functions.database.ref('/posts/{postId}').onUpdate((change, context) => {
+exports.onPostUpdated = functions.database.ref('/posts/{postId}').onUpdate(async (change, context) => {
     const postId = context.params.postId;
     const post = change.after.val();
     post.id = postId;
-    notifyWebhooks('post-updated', post);
-    notifyWebhooks('my-post-updated', post, post.uid);
+    await notifyWebhooks('post-updated', post);
+    await notifyWebhooks('my-post-updated', post, post.uid);
 });
 
 const notifyWebhooks = async (event, data, userId) => {
@@ -133,9 +133,14 @@ const notifyWebhooks = async (event, data, userId) => {
         }
         let res;
         try {
+            functions.logger.log('Notifying webhook', webhook.url, 'for event', event, 'with data', data, 'for user', userId);
             res = await axios.post(webhook.url, { event, data });
         } catch (err) {
             functions.logger.error('Error notifying webhook', webhook.url, 'for event', event, 'with data', data, 'for user', userId, err, 'response', res);
+            if (err.response.status === 400) {
+                // Gone. Delete the webhook.
+                await firebaseApp.database().ref().child('webhooks/' + event + '/' + webhookId).remove();
+            }
         }
     }
 };
