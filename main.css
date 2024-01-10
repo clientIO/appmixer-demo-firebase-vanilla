@@ -148,12 +148,15 @@ main {
   align-items: center;
   height: 100%;
   width: 100%;
-  background: var(--color-primary);
+  background: white;
 }
 #splash-page > h1 {
   font-size: 24px;
   font-weight: 500;
-  color: white;
+  color: black;
+}
+#splash-page p {
+    color: black !important;
 }
 
 /* Sign-In button  */
@@ -189,19 +192,22 @@ main {
 }
 
 /* Add Post button  */
-#add-post-button {
+.add-post-button {
     display: inline-block;
-    width: 36px;
-    height: 36px;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    width: 60px;
+    height: 60px;
     margin-right: 16px;
     background: #FFA000 url('assets/post-add-white.svg') no-repeat center center;
     background-size: 18px;
     border-radius: 100%;
 }
-#add-post-button:hover {
+.add-post-button:hover {
     background-color: #F57F17;
 }
-#add-post-button.is-active {
+.add-post-button.is-active {
     background-color: lightgray;
     pointer-events: none;
     cursor: initial;
