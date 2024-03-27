@@ -322,7 +322,7 @@ function setupIntegrationsPage() {
             'sharedWith.0.domain': APPMIXER_USER_DOMAIN,
             // Show Integration templates only. Template don't have `templateId`,
             // only instances do to reference templates they were created from.
-            templateId: '!'
+            type: 'integration-template'
         }
     });
 }
@@ -337,9 +337,7 @@ function setupEnabledIntegrationsPage() {
         customFilter: {
             // Show only my instances. Not all flows that have been possibly shared with me in the Studio.
             userId: appmixer.get('user').id,
-            // Show Integration instances only. Instances have `templateId`
-            // to reference the template they were created from.
-            templateId: '>0'
+            type: 'integration-instance'
         }
     });
 }
@@ -468,6 +466,7 @@ function createWidgets() {
                     onPrimary: '#3265CB'
                 }
             }
+
         },
         l10n: {
             ui: {
