@@ -445,10 +445,9 @@ function createWidgets() {
 
     // Create Wizard Page widget.
     widgets.wizard = appmixer.ui.Wizard();
-    widgets.wizard.on('flow:start-after', () => widgets.integrations.reload());
-    widgets.wizard.on('flow:remove-after', () => {
+    widgets.wizard.on('close', ({ next }) => {
         widgets.integrations.reload();
-        widgets.wizard.close();
+        next();
     });
 
     // Create Automations Page widget.
