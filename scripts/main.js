@@ -55,6 +55,7 @@ const appmixer = new Appmixer({
 
 const widgets = {
     integrations: null,
+    logs: null,
     automations: null,
     designer: null,
     wizard: null
@@ -372,6 +373,7 @@ function setupDesignerPage(route) {
     widgets.designer.set('componentId', componentId);
 }
 
+
 /**
  * Navigate pages and panels.
  */
@@ -442,6 +444,14 @@ function createWidgets() {
         widgets.wizard.set('flowId', integrationId);
         widgets.wizard.open();
     });
+    widgets.logs = appmixer.ui.InsightsLogs({
+        options: {
+            showHistogram: true
+        }
+    });
+    widgets.logs.state('filterLayout', 'collapsed');
+    widgets.logs.state('query/flowType', 'integration-instance');
+    widgets.logs.state('query/userId', appmixer.get('user').id);
 
     // Create Wizard Page widget.
     widgets.wizard = appmixer.ui.Wizard();
@@ -675,6 +685,14 @@ window.addEventListener('load', async () => {
                     location.href = '#posts';
                 });
             }
+        });
+
+    // Integration logs in a popup.
+    document.getElementById('show-integration-logs')
+        .addEventListener('click', function(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            widgets.logs.open();
         });
 
     // Listen for authentication state changes.
