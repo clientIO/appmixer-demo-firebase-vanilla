@@ -266,7 +266,7 @@ main {
 #page-recent,
 #page-posts,
 #page-top-posts {
-    background: var(--color-primary);
+    background: #eaeaea;
 }
 .posts-container {
     display: grid;
@@ -430,7 +430,7 @@ main {
 
 /* Integrations page */
 #page-integrations {
-  background: var(--color-primary);
+  background: #eaeaea;
 }
 #page-integrations > nav {
   width: var(--base-section-width);
@@ -439,7 +439,7 @@ main {
 }
 #page-integrations > nav > a {
   margin-right: 24px;
-  color: white;
+  color: #202124;
   opacity: 0.72;
 }
 #page-integrations > nav > a.is-active {
@@ -470,7 +470,7 @@ div.am-integration-tile:hover {
 
 /* Automations page */
 #page-automations {
-  background: var(--color-primary);
+  background: #eaeaea;
 }
 #page-automations > section {
   width: var(--base-section-width);
